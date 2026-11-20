@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "VELoop Rewards API",
+    "description": "Postman Collection for testing VELoop Daily Streak & Rewards Engine",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}

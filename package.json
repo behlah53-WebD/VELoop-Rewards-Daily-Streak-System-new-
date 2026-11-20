@@ -1,0 +1,25 @@
+{
+  "name": "veloop-daily-streak",
+  "version": "1.0.0",
+  "description": "VELoop Rewards - Daily Streak & Rewards System",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "lint": "npm run lint --workspace=backend && npm run lint --workspace=frontend",
+    "test": "npm run test --workspace=backend"
+  },
+  "keywords": [
+    "veloop",
+    "streak",
+    "rewards",
+    "mern"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

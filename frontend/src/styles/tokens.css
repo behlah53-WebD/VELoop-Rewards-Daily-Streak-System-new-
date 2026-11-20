@@ -1,0 +1,80 @@
+:root {
+  /* Colors: Backgrounds & Surfaces */
+  --bg-base: #07050f;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #200d3d 0%, #0d0720 50%, #07050f 100%);
+  --surface-card: #120b24;
+  --surface-raised: #1a1033;
+  --surface-overlay: rgba(18, 11, 36, 0.85);
+
+  /* Borders */
+  --border-subtle: rgba(139, 92, 246, 0.16);
+  --border-default: rgba(139, 92, 246, 0.28);
+  --border-focus: rgba(167, 139, 250, 0.6);
+  --border-gold: rgba(255, 200, 61, 0.5);
+  --border-gold-solid: #ffc83d;
+  --border-success: rgba(34, 197, 94, 0.5);
+
+  /* Primary Violet Palette */
+  --violet-primary: #7c3aed;
+  --violet-bright: #8b5cf6;
+  --violet-soft: #a78bfa;
+  --violet-deep: #4c1d95;
+  --violet-glow: rgba(124, 58, 237, 0.35);
+
+  /* Gold Palette (Rewards / Highlights / Claim Button) */
+  --gold-start: #ffc83d;
+  --gold-end: #f5a300;
+  --gold-gradient: linear-gradient(135deg, #ffc83d 0%, #f5a300 100%);
+  --gold-text: #ffd566;
+  --gold-glow: rgba(255, 200, 61, 0.25);
+
+  /* Success Palette */
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --success-border: rgba(34, 197, 94, 0.35);
+
+  /* Danger / Missed Palette */
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.12);
+  --danger-border: rgba(239, 68, 68, 0.35);
+
+  /* Typography Colors */
+  --text-main: #f5f3ff;
+  --text-muted: #a79fc2;
+  --text-subtle: #797195;
+  --text-inverse: #07050f;
+
+  /* Typography Families */
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Glows */
+  --glow-sm: 0 0 12px rgba(139, 92, 246, 0.2);
+  --glow-md: 0 0 24px rgba(139, 92, 246, 0.35);
+  --glow-lg: 0 0 40px rgba(139, 92, 246, 0.5);
+  --glow-gold-sm: 0 0 14px rgba(255, 200, 61, 0.3);
+  --glow-gold-lg: 0 0 32px rgba(255, 200, 61, 0.55);
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+}
