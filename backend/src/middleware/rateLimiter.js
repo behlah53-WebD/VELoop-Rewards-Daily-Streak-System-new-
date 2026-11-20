@@ -8,6 +8,7 @@ export const globalLimiter = rateLimit({
   max: 300,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   handler: (req, res) => {
     res.status(429).json({
       success: false,
@@ -29,6 +30,7 @@ export const strictLimiter = rateLimit({
   max: 30,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   handler: (req, res) => {
     res.status(429).json({
       success: false,

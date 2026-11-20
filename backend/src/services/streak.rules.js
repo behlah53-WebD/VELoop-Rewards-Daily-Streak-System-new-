@@ -15,8 +15,10 @@
 export function computeStreakPhase(cycle, config, nowInput = new Date()) {
   const now = nowInput instanceof Date ? nowInput.getTime() : Number(nowInput);
   const cycleLength = config.cycleLength || 7;
-  const intervalMs = (config.claimIntervalHours || 24) * 60 * 60 * 1000;
-  const windowMs = (config.claimWindowHours || 24) * 60 * 60 * 1000;
+  const intervalHours = config.claimIntervalHours !== undefined ? config.claimIntervalHours : 24;
+  const windowHours = config.claimWindowHours !== undefined ? config.claimWindowHours : 24;
+  const intervalMs = intervalHours * 60 * 60 * 1000;
+  const windowMs = windowHours * 60 * 60 * 1000;
 
   if (!cycle) {
     return {
@@ -135,8 +137,10 @@ export function resolveDayStatus(day, phaseInfo, claimedDays = []) {
  */
 export function calculateNextClaimSchedule(claimedDay, config, claimTimeInput = new Date()) {
   const claimTime = claimTimeInput instanceof Date ? claimTimeInput : new Date(claimTimeInput);
-  const intervalMs = (config.claimIntervalHours || 24) * 60 * 60 * 1000;
-  const windowMs = (config.claimWindowHours || 24) * 60 * 60 * 1000;
+  const intervalHours = config.claimIntervalHours !== undefined ? config.claimIntervalHours : 24;
+  const windowHours = config.claimWindowHours !== undefined ? config.claimWindowHours : 24;
+  const intervalMs = intervalHours * 60 * 60 * 1000;
+  const windowMs = windowHours * 60 * 60 * 1000;
   const cycleLength = config.cycleLength || 7;
 
   const nextClaimAt = new Date(claimTime.getTime() + intervalMs);

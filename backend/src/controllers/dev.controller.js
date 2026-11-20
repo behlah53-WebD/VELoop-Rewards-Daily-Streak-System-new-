@@ -8,7 +8,8 @@ import clock from '../services/clock.js';
 
 export async function timeTravel(req, res, next) {
   try {
-    if (!env.ENABLE_DEV_TOOLS || env.NODE_ENV === 'production') {
+    const isDevAllowed = env.ENABLE_DEV_TOOLS || env.NODE_ENV === 'test' || env.NODE_ENV === 'development';
+    if (!isDevAllowed || env.NODE_ENV === 'production') {
       return res.status(403).json({
         success: false,
         error: {
@@ -93,7 +94,8 @@ export async function timeTravel(req, res, next) {
 
 export async function resetUser(req, res, next) {
   try {
-    if (!env.ENABLE_DEV_TOOLS || env.NODE_ENV === 'production') {
+    const isDevAllowed = env.ENABLE_DEV_TOOLS || env.NODE_ENV === 'test' || env.NODE_ENV === 'development';
+    if (!isDevAllowed || env.NODE_ENV === 'production') {
       return res.status(403).json({
         success: false,
         error: {

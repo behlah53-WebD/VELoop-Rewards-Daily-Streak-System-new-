@@ -259,7 +259,44 @@ export class StreakService {
     let rawCycle = await this.getOrCreateActiveCycle(userId);
     const { cycle } = await this.lazyCheckMissedDay(rawCycle, config);
 
-    // 3. Compute Phase and check timing
+    // 3. Requested day verification (validate requested day first)
+    const currentDay = cycle.currentDay;
+    if (requestedDayHint !== undefined && requestedDayHint !== null) {
+      const hintNum = Number(requestedDayHint);
+      if (cycle.claimedDays.includes(hintNum)) {
+        await auditService.logAudit({
+          userId,
+          event: 'DUPLICATE_CLAIM',
+          requestId: reqId,
+          ip,
+          userAgent,
+          details: { day: hintNum, cycleId: cycle._id },
+        });
+
+        const error = new Error('This reward has already been claimed.');
+        error.statusCode = 400;
+        error.code = 'ALREADY_CLAIMED';
+        throw error;
+      }
+
+      if (hintNum !== currentDay) {
+        await auditService.logAudit({
+          userId,
+          event: 'INVALID_CLAIM',
+          requestId: reqId,
+          ip,
+          userAgent,
+          details: { requestedDay: hintNum, serverCurrentDay: currentDay },
+        });
+
+        const error = new Error(`Requested Day ${hintNum} does not match eligible Day ${currentDay}.`);
+        error.statusCode = 400;
+        error.code = 'DAY_MISMATCH';
+        throw error;
+      }
+    }
+
+    // 4. Compute Phase and check timing
     const phaseInfo = computeStreakPhase(cycle, config, clock.nowDate());
 
     if (phaseInfo.phase === 'WAITING') {
@@ -299,27 +336,6 @@ export class StreakService {
       throw error;
     }
 
-    // 4. Requested day mismatch check
-    const currentDay = cycle.currentDay;
-    if (requestedDayHint !== undefined && requestedDayHint !== null) {
-      const hintNum = Number(requestedDayHint);
-      if (hintNum !== currentDay) {
-        await auditService.logAudit({
-          userId,
-          event: 'INVALID_CLAIM',
-          requestId: reqId,
-          ip,
-          userAgent,
-          details: { requestedDay: hintNum, serverCurrentDay: currentDay },
-        });
-
-        const error = new Error(`Requested Day ${hintNum} does not match eligible Day ${currentDay}.`);
-        error.statusCode = 400;
-        error.code = 'DAY_MISMATCH';
-        throw error;
-      }
-    }
-
     // 5. Already claimed check
     if (cycle.claimedDays.includes(currentDay)) {
       await auditService.logAudit({
@@ -332,7 +348,7 @@ export class StreakService {
       });
 
       const error = new Error('This reward has already been claimed.');
-      error.statusCode = 409;
+      error.statusCode = 400;
       error.code = 'ALREADY_CLAIMED';
       throw error;
     }
@@ -347,7 +363,7 @@ export class StreakService {
     }
 
     const now = clock.nowDate();
-    const demoDurationMs = (config.cpaDemoSeconds || 3) * 1000;
+    const demoDurationMs = (config.cpaDemoSeconds !== undefined ? config.cpaDemoSeconds : 3) * 1000;
     const pendingTtlMs = (config.pendingClaimTtlSeconds || 120) * 1000;
     const demoReadyAt = new Date(now.getTime() + demoDurationMs);
     const pendingExpiresAt = new Date(now.getTime() + pendingTtlMs);
@@ -638,10 +654,35 @@ export class StreakService {
       };
     } catch (err) {
       if (useTransaction && session) {
-        await session.abortTransaction();
+        try {
+          await session.abortTransaction();
+        } catch {
+          // Ignore abort errors
+        }
       }
 
-      if (err.code === 11000 || err.code === 'ALREADY_CLAIMED') {
+      if (
+        err.code === 11000 ||
+        err.code === 112 ||
+        err.code === 'ALREADY_CLAIMED' ||
+        err.name === 'MongoServerError' ||
+        err.hasErrorLabel?.('TransientTransactionError')
+      ) {
+        // Check if the claim succeeded in the winning concurrent transaction
+        const completedClaim = await StreakClaim.findOne({ claimId, status: 'COMPLETED' });
+        if (completedClaim) {
+          const wallet = await walletService.getOrCreateWallet(userId);
+          return {
+            success: true,
+            idempotentReplay: true,
+            message: 'This reward has already been claimed.',
+            claimId: completedClaim.claimId,
+            day: completedClaim.day,
+            reward: completedClaim.rewardSnapshot,
+            wallet: wallet.balances,
+          };
+        }
+
         const error = new Error('This reward has already been claimed.');
         error.statusCode = 409;
         error.code = 'ALREADY_CLAIMED';

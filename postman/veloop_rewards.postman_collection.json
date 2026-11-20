@@ -1,8 +1,348 @@
 {
   "info": {
-    "name": "VELoop Rewards API",
-    "description": "Postman Collection for testing VELoop Daily Streak & Rewards Engine",
+    "_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
+    "name": "VELoop Rewards — Complete Streak & Proof Collection",
+    "description": "Comprehensive Postman collection for VELoop Rewards Daily Streak System.\nCovers Authentication, Full Streak Flow (Days 1-7), CPA Verification, Negative Security Tests (Fake Payloads, Locked Days, Day Mismatches), Dev Time-Travel, Reset Notice Ack, History, and Wallet.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": []
+  "item": [
+    {
+      "name": "01. Auth",
+      "item": [
+        {
+          "name": "Login (Demo User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.environment.set('token', res.token);",
+                  "    pm.environment.set('userId', res.user.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"demo@veloop.test\",\n  \"password\": \"Demo@1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Daily Streak",
+      "item": [
+        {
+          "name": "Get Daily Streak (Full Page State)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak"]
+            }
+          }
+        },
+        {
+          "name": "Get Status (Lightweight Countdown Sync)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "status"]
+            }
+          }
+        },
+        {
+          "name": "Initiate Claim (Phase 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.claimId) {",
+                  "    pm.environment.set('claimId', res.claimId);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim"]
+            }
+          }
+        },
+        {
+          "name": "Confirm Claim (Phase 2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Idempotency-Key", "value": "req-confirm-idempotency-key" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"{{claimId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim", "confirm"]
+            }
+          }
+        },
+        {
+          "name": "Acknowledge Reset Notice",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/reset-notice/ack",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "reset-notice", "ack"]
+            }
+          }
+        },
+        {
+          "name": "Get Streak Calendar History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/history?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "history"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Wallet",
+      "item": [
+        {
+          "name": "Get Wallet & Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/wallet",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wallet"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Negative & Security Tests",
+      "item": [
+        {
+          "name": "Locked Day (Early Claim Attempt) -> STILL_LOCKED",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim"]
+            }
+          }
+        },
+        {
+          "name": "Fake Day Mismatch (Request Day 7 while on Day 2) -> DAY_MISMATCH",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 7\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim"]
+            }
+          }
+        },
+        {
+          "name": "Fake Reward Payload -> Stripped by Zod",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"day\": 2,\n  \"amount\": 99999,\n  \"currency\": \"USD\",\n  \"streak\": 100,\n  \"userId\": \"attackerId\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim"]
+            }
+          }
+        },
+        {
+          "name": "Premature Confirmation -> CLAIM_NOT_READY",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"{{claimId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak/claim/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak", "claim", "confirm"]
+            }
+          }
+        },
+        {
+          "name": "Unauthenticated Request -> UNAUTHENTICATED (401)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/daily-streak",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "daily-streak"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Developer Tools",
+      "item": [
+        {
+          "name": "Dev Time-Travel (+24.5 Hours to Unlock Next Day)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"advanceHours\": 24.5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/dev/time-travel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dev", "time-travel"]
+            }
+          }
+        },
+        {
+          "name": "Dev Time-Travel (+55 Hours to Trigger Missed-Day Reset)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"advanceHours\": 55\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/dev/time-travel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dev", "time-travel"]
+            }
+          }
+        },
+        {
+          "name": "Dev Reset User State",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dev/reset-user",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "dev", "reset-user"]
+            }
+          }
+        }
+      ]
+    }
+  ]
 }
