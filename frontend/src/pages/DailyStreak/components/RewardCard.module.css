@@ -1,0 +1,211 @@
+.card {
+  position: relative;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  overflow: hidden;
+  min-height: 195px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* Card States */
+.cardClaimed {
+  border-color: var(--success-border);
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.08) 0%, var(--surface-card) 60%);
+}
+
+.cardAvailable {
+  border: 1.5px solid var(--gold-start);
+  box-shadow: var(--glow-gold-sm);
+  background: linear-gradient(180deg, rgba(255, 200, 61, 0.1) 0%, var(--surface-card) 60%);
+}
+
+.cardToday {
+  border: 1.5px solid var(--border-focus);
+  background: linear-gradient(180deg, rgba(139, 92, 246, 0.12) 0%, var(--surface-card) 60%);
+}
+
+.cardLocked {
+  opacity: 0.75;
+  background: var(--surface-card);
+}
+
+.cardMissed {
+  border-color: var(--danger-border);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, var(--surface-card) 60%);
+}
+
+.cardUltimate {
+  border: 1.5px solid var(--gold-start);
+  box-shadow: 0 0 20px rgba(255, 200, 61, 0.35);
+  background: linear-gradient(180deg, rgba(255, 200, 61, 0.15) 0%, #1e1038 60%);
+}
+
+/* Card Header (Day & Badge) */
+.cardTop {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.dayPill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--surface-raised);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.badgePill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+}
+
+.badgeGold {
+  background: rgba(255, 200, 61, 0.2);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-text);
+}
+
+.badgeViolet {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--border-default);
+  color: var(--violet-soft);
+}
+
+/* Asset Container */
+.assetWrap {
+  margin: var(--space-2) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+}
+
+/* Card Typography */
+.cardCategory {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.cardValue {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: var(--space-3);
+  line-height: 1.2;
+}
+
+.goldValue {
+  color: var(--gold-text);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Status / Action Footer */
+.cardFooter {
+  width: 100%;
+  margin-top: auto;
+}
+
+.claimBtn {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--gold-gradient);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #3b2200;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: var(--glow-gold-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.claimBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-gold-lg);
+}
+
+.claimedPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.countdownPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-focus);
+  color: var(--violet-soft);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.lockedPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.missedPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+}

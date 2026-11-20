@@ -1,0 +1,64 @@
+.footer {
+  margin-top: auto;
+  padding: var(--space-6) var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-overlay);
+}
+
+.inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.brandSide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.shieldBadge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--gold-text);
+  box-shadow: var(--glow-sm);
+}
+
+.trustText {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.officialDomain {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.copyright {
+  color: var(--text-subtle);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 767px) {
+  .inner {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-3);
+  }
+  .brandSide {
+    flex-direction: column;
+  }
+}

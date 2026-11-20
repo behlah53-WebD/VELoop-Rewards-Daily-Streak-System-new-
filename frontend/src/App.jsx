@@ -3,7 +3,8 @@ import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
 import LoginPage from './pages/Login/LoginPage.jsx';
 import RegisterPage from './pages/Register/RegisterPage.jsx';
-import DailyStreakPlaceholder from './pages/DailyStreak/DailyStreakPlaceholder.jsx';
+import DailyStreakPage from './pages/DailyStreak/DailyStreakPage.jsx';
+import StreakCalendarPage from './pages/DailyStreak/StreakCalendarPage.jsx';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -64,7 +65,7 @@ export function App() {
             path="/daily-streak"
             element={
               <ProtectedRoute>
-                <DailyStreakPlaceholder />
+                <DailyStreakPage />
               </ProtectedRoute>
             }
           />
@@ -72,7 +73,7 @@ export function App() {
             path="/daily-streak/calendar"
             element={
               <ProtectedRoute>
-                <DailyStreakPlaceholder />
+                <StreakCalendarPage />
               </ProtectedRoute>
             }
           />

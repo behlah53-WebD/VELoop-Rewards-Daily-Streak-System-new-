@@ -1,0 +1,76 @@
+.railContainer {
+  margin-bottom: var(--space-6);
+  padding: 0 var(--space-2);
+}
+
+.railWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.trackLine {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: var(--surface-raised);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.activeTrackLine {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--success) 0%, var(--gold-start) 100%);
+  transform: translateY(-50%);
+  z-index: 2;
+  transition: width 0.4s ease;
+}
+
+.node {
+  position: relative;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-card);
+  border: 2px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition-base);
+}
+
+.nodeClaimed {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.nodeActive {
+  background: var(--surface-card);
+  border-color: var(--gold-start);
+  color: var(--gold-text);
+  box-shadow: var(--glow-gold-sm);
+  animation: pulseNode 2s infinite ease-in-out;
+}
+
+@keyframes pulseNode {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 200, 61, 0.4);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(255, 200, 61, 0.75);
+  }
+}

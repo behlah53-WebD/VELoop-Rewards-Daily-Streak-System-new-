@@ -1,0 +1,124 @@
+.banner {
+  background: linear-gradient(135deg, #2a1147 0%, #1a0a33 50%, #120724 100%);
+  border: 1px solid rgba(255, 200, 61, 0.35);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5) var(--space-6);
+  margin-bottom: var(--space-6);
+  box-shadow: 0 0 24px rgba(124, 58, 237, 0.25), inset 0 0 16px rgba(255, 200, 61, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  position: relative;
+  overflow: hidden;
+}
+
+.glowDecor {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(255, 200, 61, 0.25) 0%, rgba(124, 58, 237, 0) 70%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.leftPodium {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  z-index: 2;
+}
+
+.crownContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rewardInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.chipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: 4px;
+}
+
+.badgeChip {
+  background: rgba(255, 200, 61, 0.15);
+  border: 1px solid var(--border-gold);
+  color: var(--gold-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+}
+
+.brandChip {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.bigValue {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
+  font-weight: 800;
+  color: var(--gold-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.valueSub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.rightUnlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.lockIcon {
+  color: var(--gold-start);
+}
+
+.boldDay {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+@media (max-width: 575px) {
+  .banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-4);
+  }
+  .rightUnlock {
+    width: 100%;
+    justify-content: center;
+  }
+}

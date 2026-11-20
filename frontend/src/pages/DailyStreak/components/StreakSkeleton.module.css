@@ -1,0 +1,72 @@
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(26, 16, 51, 0.7) 0%,
+    rgba(45, 27, 85, 0.9) 50%,
+    rgba(26, 16, 51, 0.7) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeletonHeader {
+  height: 64px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface-overlay);
+}
+
+.skeletonHero {
+  height: 160px;
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+}
+
+.skeletonStats {
+  height: 90px;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-6);
+}
+
+.skeletonUltimate {
+  height: 110px;
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-6);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.skeletonCard {
+  height: 170px;
+  border-radius: var(--radius-lg);
+}
+
+.skeletonCardRow2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+@media (max-width: 767px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .skeletonCardRow2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
