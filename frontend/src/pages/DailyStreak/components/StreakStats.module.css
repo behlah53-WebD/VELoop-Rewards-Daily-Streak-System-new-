@@ -1,5 +1,9 @@
 .statsContainer {
-  margin-bottom: var(--space-6);
+  margin-bottom: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .topBar {

@@ -131,6 +131,7 @@
 
 .claimBtn {
   width: 100%;
+  min-height: 44px;
   padding: 8px 12px;
   background: var(--gold-gradient);
   border: none;
@@ -158,6 +159,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+  min-height: 40px;
   background: var(--success-bg);
   border: 1px solid var(--success-border);
   color: var(--success);
@@ -172,6 +174,7 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+  min-height: 40px;
   background: var(--surface-raised);
   border: 1px solid var(--border-focus);
   color: var(--violet-soft);
@@ -187,6 +190,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+  min-height: 40px;
   background: var(--surface-raised);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
@@ -201,6 +205,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
+  min-height: 40px;
   background: var(--danger-bg);
   border: 1px solid var(--danger-border);
   color: var(--danger);

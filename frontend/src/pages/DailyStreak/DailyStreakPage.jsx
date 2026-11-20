@@ -14,6 +14,7 @@ import StreakLoader from './components/StreakLoader.jsx';
 import ErrorState from './components/ErrorState.jsx';
 import WhyStreak from './components/WhyStreak.jsx';
 import TrustFooter from './components/TrustFooter.jsx';
+import { Sparkles } from 'lucide-react';
 import styles from './DailyStreak.module.css';
 
 export function DailyStreakPage() {
@@ -87,14 +88,14 @@ export function DailyStreakPage() {
         {/* Hero Banner */}
         <HeroBanner />
 
-        {/* Stats Row & Streak Calendar Link */}
-        <StreakStats streakData={streak} />
-
-        {/* Ultimate Reward Feature Banner */}
-        <UltimateReward
-          ultimateReward={streak?.ultimateReward}
-          currentDay={streak?.currentDay}
-        />
+        {/* Stats Row & Ultimate Reward (Tablet & Desktop Side-by-Side, Mobile Stacked) */}
+        <div className={styles.statsAndUltimateRow}>
+          <StreakStats streakData={streak} />
+          <UltimateReward
+            ultimateReward={streak?.ultimateReward}
+            currentDay={streak?.currentDay}
+          />
+        </div>
 
         {/* Progress Rail */}
         <ProgressRail
@@ -115,6 +116,17 @@ export function DailyStreakPage() {
           onUnlocked={handleServerUnlocked}
           isClaiming={claimStep === 'INITIATING'}
         />
+
+        {/* Don't Miss Out Callout Panel */}
+        <div className={styles.dontMissOutPanel}>
+          <Sparkles size={18} color="var(--gold-start)" />
+          <p className={styles.dontMissOutText}>
+            Don&apos;t Miss Out —{' '}
+            <span className={styles.dontMissOutGold}>
+              come back every day &amp; unlock all rewards!
+            </span>
+          </p>
+        </div>
 
         {/* Why Maintain Streak Columns */}
         <WhyStreak />

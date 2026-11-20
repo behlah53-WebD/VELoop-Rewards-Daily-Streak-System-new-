@@ -70,12 +70,24 @@
 
 @media (max-width: 575px) {
   .banner {
-    padding: var(--space-5) var(--space-4);
-    text-align: center;
+    padding: var(--space-4) var(--space-3);
+    gap: 6px;
   }
-  .artLeft {
-    display: none;
+  .headline {
+    font-size: 1.15rem;
   }
+  .subtext {
+    font-size: 0.8rem;
+  }
+  .artLeft,
+  .artRight {
+    display: flex;
+    transform: scale(0.72);
+  }
+}
+
+@media (max-width: 370px) {
+  .artLeft,
   .artRight {
     display: none;
   }

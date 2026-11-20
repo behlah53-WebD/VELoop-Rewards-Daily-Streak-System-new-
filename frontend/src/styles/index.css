@@ -50,6 +50,20 @@ button {
   font-family: inherit;
 }
 
+/* Accessibility: Visible Focus Indicators */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 3px;
+}
+
+/* Ensure no horizontal scrollbar occurs at any breakpoint */
+body,
+#root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 /* Scrollbar customization */
 ::-webkit-scrollbar {
   width: 8px;
