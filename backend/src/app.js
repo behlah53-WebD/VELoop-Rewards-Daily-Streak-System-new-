@@ -5,7 +5,9 @@ import mongoSanitize from 'express-mongo-sanitize';
 import env from './config/env.js';
 import requestIdMiddleware from './middleware/requestId.js';
 import errorHandler from './middleware/errorHandler.js';
+import { globalLimiter } from './middleware/rateLimiter.js';
 import healthRoutes from './routes/health.routes.js';
+import apiRoutes from './routes/index.js';
 
 const app = express();
 
@@ -43,15 +45,11 @@ app.use(requestIdMiddleware);
 // Health check route mounted directly at root
 app.use(healthRoutes);
 
-// API routes prefix placeholder
-app.get('/api', (req, res) => {
-  res.json({
-    success: true,
-    name: 'VELoop Rewards API',
-    version: '1.0.0',
-    serverTime: new Date().toISOString(),
-  });
-});
+// Apply rate limiting to all /api routes
+app.use('/api', globalLimiter);
+
+// API routes mounted at /api
+app.use('/api', apiRoutes);
 
 // 404 Handler for undefined routes
 app.use((req, res) => {
