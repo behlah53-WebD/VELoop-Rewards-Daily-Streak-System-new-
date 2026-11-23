@@ -63,8 +63,8 @@ export function LoginPage() {
 
       // Brief pause for checkmark morph & confetti celebration before redirecting
       setTimeout(() => {
-        navigate('/daily-streak');
-      }, 500);
+        navigate('/daily-streak', { replace: true });
+      }, 350);
     } catch (err) {
       const msg = err.message || 'Invalid email or password';
       setErrorMessage(msg);

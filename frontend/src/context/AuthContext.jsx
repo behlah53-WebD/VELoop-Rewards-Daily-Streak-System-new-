@@ -24,12 +24,13 @@ export function AuthProvider({ children }) {
   });
   const [loading, setLoading] = useState(true);
 
-  // Sync token & user state across storage and fetch latest profile
+  // Sync token & user state across storage and fetch latest profile once on initial mount
   useEffect(() => {
     let isMounted = true;
 
     async function initializeAuth() {
-      if (token) {
+      const storedToken = localStorage.getItem('veloop_token');
+      if (storedToken) {
         try {
           const res = await authApi.getMe();
           if (isMounted && res?.user) {
@@ -59,7 +60,7 @@ export function AuthProvider({ children }) {
     return () => {
       isMounted = false;
     };
-  }, [token]);
+  }, []);
 
   const login = useCallback(async (email, password) => {
     const res = await authApi.login({ email, password });
