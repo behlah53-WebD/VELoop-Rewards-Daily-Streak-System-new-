@@ -15,16 +15,42 @@ const app = express();
 app.use(helmet());
 
 // Cross-Origin Resource Sharing
-const allowedOrigins = env.CLIENT_ORIGIN.split(',').map((origin) => origin.trim());
+const rawOrigins = env.CLIENT_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = rawOrigins.split(',').map((o) => o.trim().replace(/\/$/, ''));
+const isWildcard = allowedOrigins.includes('*');
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, server-to-server) or matching allowed list
-      if (!origin || allowedOrigins.includes(origin) || env.NODE_ENV === 'test') {
-        callback(null, true);
-      } else {
-        callback(new Error('Blocked by CORS policy'));
+      // Allow requests with no origin (like mobile apps, curl, server-to-server, or Vite proxy) or in test mode
+      if (!origin || env.NODE_ENV === 'test' || isWildcard) {
+        return callback(null, true);
       }
+
+      const normalizedOrigin = origin.replace(/\/$/, '');
+
+      // Check allowed list exact match
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      // Automatically allow localhost and 127.0.0.1 on any port in development
+      if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      // Automatically allow common cloud hosting previews
+      try {
+        const host = new URL(origin).hostname;
+        if (host.endsWith('.vercel.app') || host.endsWith('.netlify.app') || host.endsWith('.onrender.com')) {
+          return callback(null, true);
+        }
+      } catch {
+        // invalid URL format
+      }
+
+      // Reject politely without throwing a 500 error
+      return callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

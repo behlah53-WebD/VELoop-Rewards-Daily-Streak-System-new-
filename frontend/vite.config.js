@@ -24,5 +24,12 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    proxy: {
+      '/api': {
+        target: 'https://veloop-rewards-daily-streak-system-new-1-9th4.onrender.com',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
