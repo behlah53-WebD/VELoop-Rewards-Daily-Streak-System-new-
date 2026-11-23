@@ -8,14 +8,19 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139, 92, 246, 0.3) var(--bg-0);
+  overscroll-behavior-y: none;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
   background-color: var(--bg-0);
-  background-image: var(--bg-gradient);
-  background-attachment: fixed;
   color: var(--text-1);
   font-family: var(--font-body);
   font-size: 16px;
@@ -24,6 +29,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Atmospheric Ambient Aurora & Starfield Background */
@@ -36,7 +44,9 @@ body::before {
   height: 100vh;
   pointer-events: none;
   z-index: 0;
+  background-color: var(--bg-0);
   background-image: 
+    var(--bg-gradient),
     radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.16) 0%, transparent 45%),
     radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 50% 50%, rgba(255, 201, 60, 0.04) 0%, transparent 50%),
@@ -44,10 +54,13 @@ body::before {
     radial-gradient(2px 2px at 40px 70px, rgba(167, 139, 250, 0.14), rgba(0, 0, 0, 0)),
     radial-gradient(1.5px 1.5px at 90px 40px, rgba(255, 201, 60, 0.12), rgba(0, 0, 0, 0)),
     radial-gradient(2px 2px at 160px 120px, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 100% 100%, 100% 100%, 100% 100%, 200px 200px, 260px 260px, 180px 180px, 320px 320px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 200px 200px, 260px 260px, 180px 180px, 320px 320px;
   animation: auroraDrift 28s ease-in-out infinite alternate;
   opacity: 0.95;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 @keyframes auroraDrift {
