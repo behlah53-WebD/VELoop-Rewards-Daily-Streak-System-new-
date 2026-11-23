@@ -1,0 +1,9 @@
+[33m6d3035e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m final commit
+[33m0d35211[m fix(database): resolve database name casing to prevent DatabaseDifferCase 13297
+[33m34ed3ac[m docs: finalize phase 7 audit, deployment guides, and demo video script
+[33m4f626bb[m feat(polish): complete phase 6 responsive layouts, accessibility, and breakpoint polish
+[33m2d6da1a[m feat(ui): complete phase 5 daily streak UI, cards, modal, cpa demo, and history page
+[33m945f719[m feat(frontend): complete phase 4 frontend foundation hooks, services, auth, and animated assets
+[33m064f8dd[m feat(testing): complete phase 3 automated tests, postman collection, and testing docs
+[33m8b4660b[m feat(backend): complete phase 2 backend core models, services, rules, and endpoints
+[33m7fbe679[m feat(scaffold): complete phase 1 repository and application scaffolding
