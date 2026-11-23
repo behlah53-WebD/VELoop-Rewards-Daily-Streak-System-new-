@@ -11,7 +11,6 @@ describe('VELoop Daily Streak Engine — E2E Proof & Security Suite', () => {
   let secondUserToken = '';
 
   beforeAll(async () => {
-    jest.setTimeout(60000);
     await setupTestDB();
 
     // Login default demo user
@@ -25,7 +24,7 @@ describe('VELoop Daily Streak Engine — E2E Proof & Security Suite', () => {
       .post('/api/auth/register')
       .send({ name: 'Attacker User', email: 'attacker@veloop.test', password: 'Password123!' });
     secondUserToken = registerRes.body.token;
-  });
+  }, 60000);
 
   afterAll(async () => {
     clock.resetOffset();

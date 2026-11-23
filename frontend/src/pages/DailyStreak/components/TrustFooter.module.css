@@ -1,8 +1,24 @@
 .footer {
   margin-top: auto;
-  padding: var(--space-6) var(--space-4);
-  border-top: 1px solid var(--border-subtle);
-  background: var(--surface-overlay);
+  padding: var(--space-6) var(--space-5);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 6, 28, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 10;
+}
+
+/* Hairline gradient glow along the top border */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(139, 92, 246, 0.5) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .inner {
@@ -21,35 +37,52 @@
 }
 
 .shieldBadge {
-  width: 36px;
-  height: 36px;
+  position: relative;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-sm);
-  background: var(--surface-raised);
-  border: 1px solid var(--border-default);
+  background: linear-gradient(135deg, rgba(22, 13, 58, 0.9) 0%, rgba(30, 15, 60, 0.8) 100%);
+  border: 1px solid rgba(255, 201, 60, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--gold-text);
-  box-shadow: var(--glow-sm);
+  box-shadow: 0 0 16px rgba(255, 201, 60, 0.25);
+  flex-shrink: 0;
+}
+
+.shieldText {
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+
+.shieldGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  background: radial-gradient(circle, rgba(255, 201, 60, 0.2) 0%, transparent 70%);
 }
 
 .trustText {
-  color: var(--text-muted);
-  font-size: 0.85rem;
+  color: var(--text-2);
+  font-size: 0.88rem;
   margin: 0;
+  line-height: 1.4;
 }
 
 .officialDomain {
-  color: var(--text-main);
-  font-weight: 600;
+  color: var(--text-1);
+  font-weight: 700;
 }
 
 .copyright {
-  color: var(--text-subtle);
-  font-size: 0.8rem;
+  color: var(--text-3);
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 
 @media (max-width: 767px) {

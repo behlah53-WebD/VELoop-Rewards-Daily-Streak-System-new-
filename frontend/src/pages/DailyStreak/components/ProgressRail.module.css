@@ -1,6 +1,11 @@
 .railContainer {
   margin-bottom: var(--space-6);
-  padding: 0 var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  background: rgba(14, 8, 40, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .railWrapper {
@@ -8,69 +13,130 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 var(--space-2);
 }
 
 .trackLine {
   position: absolute;
-  top: 50%;
-  left: 12px;
-  right: 12px;
-  height: 3px;
-  background: var(--surface-raised);
-  transform: translateY(-50%);
+  top: 17px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
   z-index: 1;
 }
 
 .activeTrackLine {
   position: absolute;
-  top: 50%;
-  left: 12px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--success) 0%, var(--gold-start) 100%);
-  transform: translateY(-50%);
+  top: 17px;
+  left: 20px;
+  height: 4px;
+  background: linear-gradient(90deg, #34d399 0%, #8b5cf6 50%, #ffc93c 100%);
+  border-radius: var(--radius-full);
   z-index: 2;
-  transition: width 0.4s ease;
+  box-shadow: 0 0 12px rgba(255, 201, 60, 0.4);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nodeColumn {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .node {
   position: relative;
-  z-index: 3;
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: var(--surface-card);
-  border: 2px solid var(--border-default);
+  background: rgba(22, 13, 58, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-2);
   transition: all var(--transition-base);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Completed / Claimed Node */
 .nodeClaimed {
-  background: var(--success);
-  border-color: var(--success);
-  color: #fff;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #34d399;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
 }
 
+.checkIcon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* Active Current Day Node with Pulsing Halo */
 .nodeActive {
-  background: var(--surface-card);
-  border-color: var(--gold-start);
+  background: linear-gradient(135deg, #2a164d 0%, #170d32 100%);
+  border-color: #ffc93c;
   color: var(--gold-text);
-  box-shadow: var(--glow-gold-sm);
-  animation: pulseNode 2s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(255, 201, 60, 0.6);
+  transform: scale(1.12);
 }
 
-@keyframes pulseNode {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 10px rgba(255, 200, 61, 0.4);
+.activeHalo {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 201, 60, 0.5);
+  animation: pulseRailHalo 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseRailHalo {
+  0% { transform: scale(0.9); opacity: 0.3; }
+  50% { transform: scale(1.25); opacity: 0.9; }
+  100% { transform: scale(0.9); opacity: 0.3; }
+}
+
+.crownNodeIcon {
+  color: var(--gold-start);
+  filter: drop-shadow(0 0 4px var(--gold-start));
+}
+
+/* Upcoming Node */
+.nodeUpcoming {
+  background: rgba(14, 8, 40, 0.8);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-3);
+}
+
+.dayCaption {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 575px) {
+  .railContainer {
+    padding: var(--space-2) var(--space-1);
+    margin-bottom: var(--space-4);
   }
-  50% {
-    transform: scale(1.15);
-    box-shadow: 0 0 20px rgba(255, 200, 61, 0.75);
+  .node {
+    width: 28px;
+    height: 28px;
+    font-size: 0.72rem;
+  }
+  .trackLine,
+  .activeTrackLine {
+    top: 14px;
+  }
+  .dayCaption {
+    font-size: 0.65rem;
   }
 }

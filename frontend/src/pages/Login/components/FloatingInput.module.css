@@ -1,0 +1,192 @@
+.fieldGroup {
+  position: relative;
+  margin-bottom: var(--space-4);
+  width: 100%;
+}
+
+.inputContainer {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  background: rgba(14, 8, 40, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.focused {
+  background: rgba(22, 13, 58, 0.85);
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.22), 0 0 20px rgba(139, 92, 246, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hasError .inputContainer {
+  border-color: rgba(251, 113, 133, 0.7);
+  box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.2), 0 0 16px rgba(251, 113, 133, 0.2);
+}
+
+.leftIconWrapper {
+  position: absolute;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  pointer-events: none;
+  transition: color var(--transition-fast);
+  z-index: 2;
+}
+
+.focused .leftIconWrapper {
+  color: var(--violet-bright);
+}
+
+/* Floating Label Animation */
+.floatingLabel {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  color: var(--text-2);
+  pointer-events: none;
+  transition: all 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.labelWithIcon {
+  left: 46px;
+}
+
+.labelFloating {
+  top: 13px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0.4px;
+}
+
+.focused .labelFloating {
+  color: var(--violet-bright);
+}
+
+.hasError .labelFloating {
+  color: var(--danger);
+}
+
+/* Native Input element */
+.nativeInput {
+  width: 100%;
+  height: 100%;
+  padding: 18px 16px 4px 16px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-1);
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  position: relative;
+  z-index: 2;
+}
+
+.inputWithLeftIcon {
+  padding-left: 46px;
+}
+
+.inputWithRightAdornment {
+  padding-right: 48px;
+}
+
+.nativeInput:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Right Adornments */
+.validCheckBadge {
+  position: absolute;
+  right: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: popCheck 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 3;
+}
+
+@keyframes popCheck {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.eyeToggleBtn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xs);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  z-index: 3;
+}
+
+.eyeToggleBtn:hover {
+  color: var(--text-1);
+  transform: scale(1.08);
+}
+
+/* Caps Lock Warning Banner */
+.capsLockBadge {
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fbbf24;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  animation: fadeInDown 200ms ease-out;
+}
+
+.capsWarningIcon {
+  color: #f59e0b;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Error message */
+.errorMessage {
+  margin-top: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--danger);
+  animation: shakeError 300ms ease-in-out;
+  padding-left: 4px;
+}
+
+@keyframes shakeError {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}

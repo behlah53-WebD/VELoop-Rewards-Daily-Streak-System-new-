@@ -11,14 +11,24 @@ export async function getOrCreateWallet(userId, session = null) {
   let wallet = await query;
 
   if (!wallet) {
-    wallet = new Wallet({
-      userId,
-      balances: { VES: 0, INR: 0 },
-    });
-    if (session) {
-      await wallet.save({ session });
-    } else {
-      await wallet.save();
+    try {
+      wallet = new Wallet({
+        userId,
+        balances: { VES: 0, INR: 0 },
+      });
+      if (session) {
+        await wallet.save({ session });
+      } else {
+        await wallet.save();
+      }
+    } catch (err) {
+      if (err.code === 11000) {
+        let retryQuery = Wallet.findOne({ userId });
+        if (session) retryQuery = retryQuery.session(session);
+        wallet = await retryQuery;
+        if (wallet) return wallet;
+      }
+      throw err;
     }
   }
 

@@ -11,91 +11,215 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--space-4);
+  gap: var(--space-3);
 }
 
+/* Glowing status chip with animated flame */
 .streakBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255, 107, 0, 0.12);
-  border: 1px solid rgba(255, 107, 0, 0.35);
-  color: #ff8533;
-  padding: 6px 14px;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.16) 0%, rgba(255, 138, 0, 0.08) 100%);
+  border: 1px solid rgba(255, 107, 0, 0.4);
+  color: #ffa14d;
+  padding: 6px 16px;
   border-radius: var(--radius-full);
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  letter-spacing: 0.2px;
+  box-shadow: 0 0 16px rgba(255, 107, 0, 0.22);
 }
 
+.flameIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: badgeFlameFlicker 2s ease-in-out infinite alternate;
+}
+
+.flameIcon {
+  color: #ff6b00;
+}
+
+@keyframes badgeFlameFlicker {
+  0% { transform: scale(0.95); filter: drop-shadow(0 0 4px #ff6b00); }
+  100% { transform: scale(1.15); filter: drop-shadow(0 0 10px #ff8a00); }
+}
+
+/* Ghost button with animated arrow for streak calendar */
 .calendarLink {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: var(--violet-soft);
-  font-size: 0.9rem;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: var(--violet-bright);
+  font-size: 0.88rem;
   font-weight: 600;
-  transition: color var(--transition-fast);
+  transition: all var(--transition-fast);
+}
+
+.calendarArrow {
+  transition: transform var(--transition-fast);
 }
 
 .calendarLink:hover {
-  color: var(--text-main);
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.45);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.25);
 }
 
+.calendarLink:hover .calendarArrow {
+  transform: translateX(3px);
+}
+
+/* Bento 3-tile grid with subtle 3D lift on hover */
 .tilesGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
+  flex-grow: 1;
 }
 
 .tile {
-  background: var(--surface-card);
-  border: 1px solid var(--border-default);
+  background: linear-gradient(145deg, rgba(22, 13, 58, 0.7) 0%, rgba(14, 8, 40, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  text-align: center;
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  padding: var(--space-4) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.45);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .tile:hover {
-  border-color: var(--border-focus);
+  transform: translateY(-3px);
+  border-color: rgba(167, 139, 250, 0.4);
+  box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.55), 0 0 20px rgba(139, 92, 246, 0.25);
+}
+
+.tileNextReward {
+  border-color: rgba(255, 201, 60, 0.35);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 201, 60, 0.12);
+}
+
+.tileNextReward:hover {
+  border-color: rgba(255, 201, 60, 0.65);
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 201, 60, 0.35);
+}
+
+.tileHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--space-2);
+}
+
+.tileIconBadge {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-xs);
+  background: rgba(139, 92, 246, 0.18);
+  color: var(--violet-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badgeSuccess {
+  background: rgba(52, 211, 153, 0.18);
+  color: var(--success);
+}
+
+.badgeGold {
+  background: rgba(255, 201, 60, 0.18);
+  color: var(--gold-start);
 }
 
 .tileLabel {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-size: 0.74rem;
+  color: var(--text-2);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-  font-weight: 500;
+  letter-spacing: 0.6px;
+  font-weight: 700;
 }
 
 .tileValue {
   font-family: var(--font-heading);
-  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
   font-weight: 800;
-  color: var(--text-main);
-  margin: 0;
+  color: var(--text-1);
+  margin: var(--space-1) 0;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+.denominator {
+  font-size: 0.85rem;
+  color: var(--text-3);
+  font-weight: 600;
 }
 
 .goldValue {
-  color: var(--gold-text);
   background: var(--gold-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 2px 8px rgba(255, 201, 60, 0.25));
 }
 
-@media (max-width: 480px) {
+.tileSub {
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+.tileSubGold {
+  font-size: 0.72rem;
+  color: var(--gold-text);
+  opacity: 0.85;
+}
+
+/* Slim progress track inside Checked In tile */
+.miniProgressTrack {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.miniProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--violet-bright) 0%, var(--success) 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 520px) {
   .tilesGrid {
-    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
   }
   .tile {
-    padding: 12px 6px;
+    padding: 12px 8px;
   }
   .tileLabel {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   .tileValue {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+  }
+  .tileSub,
+  .tileSubGold {
+    display: none;
   }
 }

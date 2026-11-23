@@ -1,49 +1,84 @@
 .gridContainer {
   margin-bottom: var(--space-8);
+  width: 100%;
 }
 
-/* Row 1: Days 1 to 4 */
+/* Wide Desktop Single Row (>= 1100px) */
+.desktopRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+/* Tablet Row 1: 4 cards */
 .row1 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-3);
   margin-bottom: var(--space-3);
+  align-items: stretch;
 }
 
-/* Row 2: Days 5 to 7 */
+/* Tablet Row 2: 3 cards */
 .row2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
+  align-items: stretch;
 }
 
-/* Desktop single-row presentation on wide screens */
-@media (min-width: 1100px) {
-  .desktopRow {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: var(--space-3);
-  }
-}
-
-/* Small mobile responsive fallback */
-@media (max-width: 575px) {
+/* Responsive Tablet to Mobile */
+@media (max-width: 860px) and (min-width: 601px) {
   .row1 {
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 10px;
   }
   .row2 {
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 10px;
   }
 }
 
-@media (max-width: 360px) {
-  .row1 {
-    grid-template-columns: repeat(2, 1fr);
+/* Mobile: Smooth Scroll-Snap Carousel with Card Peeking */
+@media (max-width: 600px) {
+  .gridContainer {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
   }
+
+  /* Combine into a continuous horizontal scroll row on mobile */
+  .row1,
+  .row2 {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .row2 {
+    margin-top: 12px;
+  }
+
+  .gridContainer::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .gridContainer::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.4);
+    border-radius: var(--radius-full);
+  }
+}
+
+@media (max-width: 440px) {
+  .row1,
   .row2 {
     grid-template-columns: repeat(2, 1fr);
+    display: grid;
   }
   .row2 > :last-child {
     grid-column: span 2;

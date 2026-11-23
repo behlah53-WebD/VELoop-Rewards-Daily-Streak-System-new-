@@ -24,7 +24,11 @@ export function errorHandler(err, req, res, _next) {
     message = 'Invalid or expired session token. Please log in again.';
   } else if (err.code === 11000) {
     errorCode = 'DUPLICATE_ENTRY';
-    message = 'A duplicate entry was detected.';
+    if (err.keyPattern?.email || (err.message && err.message.includes('email'))) {
+      message = 'An account with this email address already exists.';
+    } else {
+      message = 'A duplicate entry was detected.';
+    }
   }
 
   // Never leak internal stack traces or MongoServerError details

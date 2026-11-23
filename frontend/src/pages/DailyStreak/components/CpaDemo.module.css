@@ -3,29 +3,30 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: var(--space-4) var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  width: 100%;
 }
 
 .cpaBadge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(124, 58, 237, 0.15);
-  border: 1px solid var(--border-default);
-  color: var(--violet-soft);
-  font-size: 0.75rem;
-  font-weight: 700;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: var(--violet-bright);
+  font-size: 0.76rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 4px 12px;
+  letter-spacing: 0.6px;
+  padding: 4px 14px;
   border-radius: var(--radius-full);
   margin-bottom: var(--space-5);
 }
 
 .spinnerWrapper {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,12 +38,13 @@
 }
 
 .ringBg {
-  stroke: var(--surface-raised);
+  stroke: rgba(255, 255, 255, 0.08);
 }
 
 .ringFill {
   stroke: url(#goldRingGrad);
-  transition: stroke-dashoffset 0.1s linear;
+  transition: stroke-dashoffset 0.08s linear;
+  filter: drop-shadow(0 0 6px rgba(255, 201, 60, 0.45));
 }
 
 .centerIcon {
@@ -54,39 +56,42 @@
 
 .title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   margin-bottom: var(--space-2);
-  color: var(--text-main);
+  color: var(--text-1);
+  letter-spacing: -0.01em;
 }
 
 .subtext {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: var(--space-6);
-  max-width: 280px;
+  color: var(--text-2);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin-bottom: var(--space-5);
+  max-width: 300px;
 }
 
 .progressBarContainer {
   width: 100%;
-  max-width: 280px;
+  max-width: 290px;
   height: 6px;
-  background: var(--surface-raised);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-full);
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .progressBarFill {
   height: 100%;
   background: var(--gold-gradient);
   border-radius: var(--radius-full);
-  transition: width 0.1s linear;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 8px rgba(255, 201, 60, 0.5);
 }
 
 .placeholderNote {
   margin-top: var(--space-5);
-  font-size: 0.75rem;
-  color: var(--text-subtle);
+  font-size: 0.78rem;
+  color: var(--text-3);
   font-style: italic;
 }

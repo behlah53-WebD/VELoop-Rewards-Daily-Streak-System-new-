@@ -2,11 +2,12 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--surface-overlay);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 12px 20px;
+  background: rgba(10, 6, 28, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 24px;
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(139, 92, 246, 0.15);
 }
 
 .inner {
@@ -23,38 +24,91 @@
   gap: var(--space-3);
 }
 
+/* Circular glass button with hover lift */
 .backBtn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--surface-raised);
-  border: 1px solid var(--border-default);
-  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-1);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .backBtn:hover {
-  background: var(--violet-deep);
-  border-color: var(--border-focus);
+  transform: translateY(-2px);
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+}
+
+.backBtn:active {
+  transform: translateY(0);
+}
+
+.backIcon {
+  transition: transform var(--transition-fast);
+}
+
+.backBtn:hover .backIcon {
+  transform: translateX(-2px);
+}
+
+.brandTitleWrap {
+  display: flex;
+  align-items: center;
 }
 
 .pageTitle {
   font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--text-main);
+  gap: 8px;
+  color: #ffffff;
+}
+
+/* Animated flickering flame icon */
+.flameWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .flameIcon {
-  color: #ff6b00;
+  color: #ff8a00;
+  animation: flameFlicker 2.2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px #ff6b00);
+}
+
+.flameGlow {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.45) 0%, transparent 70%);
+  filter: blur(6px);
+  animation: flameHalo 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes flameFlicker {
+  0% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 6px #ff6b00); }
+  35% { transform: scale(1.12) rotate(-3deg); filter: drop-shadow(0 0 12px #ff8a00); }
+  70% { transform: scale(0.96) rotate(3deg); filter: drop-shadow(0 0 8px #ff5100); }
+  100% { transform: scale(1.08) rotate(0deg); filter: drop-shadow(0 0 14px #ffaa00); }
+}
+
+@keyframes flameHalo {
+  0% { transform: scale(0.85); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 0.9; }
 }
 
 .rightSection {
@@ -63,31 +117,80 @@
   gap: var(--space-3);
 }
 
+/* Tabular VE balance pill with gold-tinted border and shimmer */
 .balancePill {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--surface-raised);
-  border: 1px solid var(--border-default);
-  box-shadow: var(--glow-sm);
-  padding: 6px 14px;
+  background: linear-gradient(135deg, rgba(22, 13, 58, 0.8) 0%, rgba(30, 15, 60, 0.6) 100%);
+  border: 1px solid rgba(255, 201, 60, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 16px rgba(255, 201, 60, 0.15);
+  padding: 7px 16px;
   border-radius: var(--radius-full);
+  overflow: hidden;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.balancePill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 201, 60, 0.6);
+}
+
+.gemWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: gemBob 3.5s ease-in-out infinite;
+}
+
+@keyframes gemBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
 }
 
 .balanceValue {
   font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--violet-soft);
+  font-weight: 800;
+  font-size: 0.96rem;
+  color: var(--gold-text);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  letter-spacing: 0.2px;
+}
+
+.pillShimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: pillSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pillSweep {
+  0% { left: -100%; }
+  35% { left: 180%; }
+  100% { left: 180%; }
+}
+
+/* Logout icon button with tooltip-style hover label */
+.logoutWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logoutBtn {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,6 +199,49 @@
 }
 
 .logoutBtn:hover {
-  background: var(--surface-raised);
-  color: var(--text-main);
+  background: rgba(251, 113, 133, 0.15);
+  border-color: rgba(251, 113, 133, 0.4);
+  color: var(--danger);
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px rgba(251, 113, 133, 0.3);
+}
+
+.logoutTooltip {
+  position: absolute;
+  bottom: -32px;
+  right: 50%;
+  transform: translateX(50%) scale(0.9);
+  background: rgba(14, 8, 40, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-1);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.logoutWrapper:hover .logoutTooltip {
+  opacity: 1;
+  transform: translateX(50%) scale(1);
+}
+
+@media (max-width: 575px) {
+  .header {
+    padding: 10px 14px;
+  }
+  .pageTitle {
+    font-size: 1.1rem;
+  }
+  .balancePill {
+    padding: 5px 12px;
+  }
+  .balanceValue {
+    font-size: 0.88rem;
+  }
 }

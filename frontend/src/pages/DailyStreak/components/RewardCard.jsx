@@ -1,6 +1,6 @@
 import { useServerCountdown } from '../../../hooks/useServerCountdown.js';
 import { AnimatedAsset } from '../../../components/AnimatedAsset/AnimatedAsset.jsx';
-import { Check, Lock, Clock, ChevronRight } from 'lucide-react';
+import { Check, Lock, Clock, ChevronRight, Sparkles, Crown } from 'lucide-react';
 import styles from './RewardCard.module.css';
 
 export function RewardCard({
@@ -10,6 +10,7 @@ export function RewardCard({
   onClaimClick = null,
   onUnlocked = null,
   isClaiming = false,
+  index = 0,
 }) {
   const { day, status, badge, assetType, isUltimate, reward } = rewardItem;
 
@@ -49,8 +50,8 @@ export function RewardCard({
       case 'CLAIMED':
         return (
           <div className={styles.claimedPill}>
-            <Check size={14} strokeWidth={3} />
-            Claimed
+            <Check size={14} strokeWidth={3} className={styles.claimedCheck} />
+            <span>Claimed</span>
           </div>
         );
 
@@ -63,16 +64,19 @@ export function RewardCard({
             disabled={isClaiming}
             aria-label={`Claim reward for Day ${day}`}
           >
-            {isClaiming ? 'Claiming...' : 'Claim Now'}
-            <ChevronRight size={16} />
+            <span className={styles.btnSweep} aria-hidden="true" />
+            <span className={styles.btnLabel}>
+              {isClaiming ? 'Claiming...' : 'Claim Now'}
+            </span>
+            <ChevronRight size={15} className={styles.btnArrow} />
           </button>
         );
 
       case 'TODAY':
         return (
           <div className={styles.countdownPill} title="Next claim countdown">
-            <Clock size={14} />
-            <span>{countdown.formattedTime}</span>
+            <Clock size={13} className={styles.clockIcon} />
+            <span className={styles.countdownText}>{countdown.formattedTime}</span>
           </div>
         );
 
@@ -86,15 +90,37 @@ export function RewardCard({
       default:
         return (
           <div className={styles.lockedPill}>
-            <Lock size={12} />
-            Locked
+            <Lock size={12} className={styles.lockIcon} />
+            <span>Locked</span>
           </div>
         );
     }
   };
 
   return (
-    <div className={getCardClassName()}>
+    <div
+      className={getCardClassName()}
+      style={{ animationDelay: `${index * 65}ms` }}
+    >
+      {/* Top rim specular highlight line */}
+      <div className={styles.cardTopRim} aria-hidden="true" />
+
+      {/* Decorative sparkles on Available card */}
+      {status === 'AVAILABLE' && (
+        <div className={styles.availableSparkles} aria-hidden="true">
+          <Sparkles size={12} className={styles.sparkleDot} />
+        </div>
+      )}
+
+      {/* VIP Ribbon badge on Day 7 card */}
+      {isUltimate && (
+        <div className={styles.vipRibbonCorner}>
+          <Crown size={11} />
+          <span>VIP</span>
+        </div>
+      )}
+
+      {/* Card Header (Day & Badge Tag) */}
       <div className={styles.cardTop}>
         <span className={styles.dayPill}>Day {day}</span>
         {badge && (
@@ -108,10 +134,12 @@ export function RewardCard({
         )}
       </div>
 
+      {/* Inner Aura & Reward Asset */}
       <div className={styles.assetWrap}>
+        <div className={styles.assetInnerGlow} aria-hidden="true" />
         <AnimatedAsset
           type={assetType || 'coin'}
-          size={isUltimate ? 58 : 50}
+          size={isUltimate ? 62 : 52}
           animation={getAnimation()}
           alt={reward?.title || `Day ${day} reward`}
         />
@@ -124,6 +152,13 @@ export function RewardCard({
       <div className={`${styles.cardValue} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
         {reward?.title || `${reward?.amount} VEs`}
       </div>
+
+      {/* Hover unlock tooltip for locked cards */}
+      {status !== 'CLAIMED' && status !== 'AVAILABLE' && status !== 'TODAY' && (
+        <div className={styles.hoverHint}>
+          Unlocks on Day {day}
+        </div>
+      )}
 
       <div className={styles.cardFooter}>
         {renderAction()}

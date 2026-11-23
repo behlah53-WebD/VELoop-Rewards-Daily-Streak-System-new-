@@ -1,0 +1,180 @@
+.loaderContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+}
+
+.auroraGlow {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(255, 201, 60, 0.08) 45%, transparent 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+/* 3D Gem Hero Stage */
+.gemHeroStage {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-6);
+}
+
+.radialPulseRing {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.2);
+  animation: pulseRing 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.85); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+  100% { transform: scale(0.85); opacity: 0.3; }
+}
+
+.sparkleOrbit1,
+.sparkleOrbit2 {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffc93c;
+  box-shadow: 0 0 10px #ffc93c, 0 0 20px #f59e0b;
+}
+
+.sparkleOrbit1 {
+  animation: orbit1 5s linear infinite;
+}
+
+.sparkleOrbit2 {
+  animation: orbit2 4.2s linear infinite reverse;
+}
+
+@keyframes orbit1 {
+  from {
+    transform: rotate(0deg) translateX(55px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(55px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit2 {
+  from {
+    transform: rotate(0deg) translateX(68px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(68px) rotate(-360deg);
+  }
+}
+
+.gemFloatWrapper {
+  position: relative;
+  z-index: 2;
+  animation: gemFloat 3.8s ease-in-out infinite;
+}
+
+@keyframes gemFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(4deg);
+  }
+}
+
+.gem3D {
+  filter: drop-shadow(0 0 24px rgba(139, 92, 246, 0.65));
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  z-index: 2;
+}
+
+.brandText {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+}
+
+.goldText {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.messageText {
+  color: var(--text-2);
+  font-size: 0.98rem;
+  margin: 0;
+  z-index: 2;
+}
+
+/* Slim Gold Progress Bar */
+.progressBarTrack {
+  margin-top: var(--space-6);
+  width: 180px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.progressBarFill {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--gold-gradient);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressShine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 80px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  animation: progressSweep 1.6s ease-in-out infinite;
+}
+
+@keyframes progressSweep {
+  0% { left: -60%; }
+  100% { left: 160%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radialPulseRing,
+  .sparkleOrbit1,
+  .sparkleOrbit2,
+  .gemFloatWrapper,
+  .progressShine {
+    animation: none !important;
+  }
+}

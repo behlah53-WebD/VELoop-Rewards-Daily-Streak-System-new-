@@ -1,5 +1,5 @@
 .banner {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(124, 58, 237, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(251, 113, 133, 0.16) 0%, rgba(139, 92, 246, 0.18) 100%);
   border: 1px solid var(--danger-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-5);
@@ -8,14 +8,16 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
-  animation: slideDown 0.3s ease-out;
+  box-shadow: 0 8px 24px rgba(251, 113, 133, 0.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: slideDown 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px);
   }
   to {
     opacity: 1;
@@ -27,34 +29,50 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  color: var(--text-main);
-  font-size: 0.95rem;
+  color: var(--text-1);
+  font-size: 0.94rem;
+  line-height: 1.4;
 }
 
 .icon {
   flex-shrink: 0;
-  color: #f87171;
+  color: #fb7185;
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 .bold {
-  font-weight: 700;
-  color: #fca5a5;
+  font-weight: 800;
+  color: #fecdd3;
 }
 
 .ackBtn {
-  background: var(--surface-raised);
-  border: 1px solid var(--border-default);
-  color: var(--text-main);
-  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-1);
+  padding: 8px 18px;
   border-radius: var(--radius-full);
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  transition: all var(--transition-fast);
 }
 
-.ackBtn:hover {
-  background: var(--surface-card);
-  border-color: var(--border-focus);
+.ackBtn:hover:not(:disabled) {
+  background: rgba(251, 113, 133, 0.25);
+  border-color: #fb7185;
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(251, 113, 133, 0.35);
+}
+
+.ackBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

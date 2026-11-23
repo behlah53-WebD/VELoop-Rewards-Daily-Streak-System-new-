@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Flame, ChevronRight } from 'lucide-react';
+import { Flame, ChevronRight, Trophy, CheckCircle, Gift } from 'lucide-react';
 import styles from './StreakStats.module.css';
 
 export function StreakStats({ streakData }) {
@@ -16,39 +16,71 @@ export function StreakStats({ streakData }) {
     return `₹${nextReward.amount} Voucher`;
   };
 
+  const checkInProgressPct = totalRewards > 0 ? (checkedIn / totalRewards) * 100 : 0;
+
   return (
     <div className={styles.statsContainer}>
       <div className={styles.topBar}>
         <div className={styles.streakBadge}>
-          <Flame size={16} color="#ff6b00" />
+          <span className={styles.flameIconWrap}>
+            <Flame size={16} className={styles.flameIcon} />
+          </span>
           <span>
             {currentStreak > 0 ? `${currentStreak} Day Streak` : 'Start your streak'}
           </span>
         </div>
 
         <Link to="/daily-streak/calendar" className={styles.calendarLink}>
-          Streak Calendar <ChevronRight size={16} />
+          <span>Streak Calendar</span>
+          <ChevronRight size={15} className={styles.calendarArrow} />
         </Link>
       </div>
 
       <div className={styles.tilesGrid}>
+        {/* Bento Tile 1: Total Rewards */}
         <div className={styles.tile}>
-          <div className={styles.tileLabel}>Total Rewards</div>
+          <div className={styles.tileHeader}>
+            <span className={styles.tileIconBadge}>
+              <Trophy size={14} />
+            </span>
+            <span className={styles.tileLabel}>Total Rewards</span>
+          </div>
           <div className={styles.tileValue}>{totalRewards}</div>
+          <div className={styles.tileSub}>Milestones available</div>
         </div>
 
+        {/* Bento Tile 2: Checked In */}
         <div className={styles.tile}>
-          <div className={styles.tileLabel}>Checked In</div>
+          <div className={styles.tileHeader}>
+            <span className={`${styles.tileIconBadge} ${styles.badgeSuccess}`}>
+              <CheckCircle size={14} />
+            </span>
+            <span className={styles.tileLabel}>Checked In</span>
+          </div>
           <div className={styles.tileValue}>
-            {checkedIn} <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>/ {totalRewards}</span>
+            {checkedIn} <span className={styles.denominator}>/ {totalRewards}</span>
+          </div>
+          {/* Mini progress bar on Checked In tile */}
+          <div className={styles.miniProgressTrack}>
+            <div
+              className={styles.miniProgressFill}
+              style={{ width: `${checkInProgressPct}%` }}
+            />
           </div>
         </div>
 
-        <div className={styles.tile}>
-          <div className={styles.tileLabel}>Next Reward</div>
+        {/* Bento Tile 3: Next Reward (Golden glow) */}
+        <div className={`${styles.tile} ${styles.tileNextReward}`}>
+          <div className={styles.tileHeader}>
+            <span className={`${styles.tileIconBadge} ${styles.badgeGold}`}>
+              <Gift size={14} />
+            </span>
+            <span className={styles.tileLabel}>Next Reward</span>
+          </div>
           <div className={`${styles.tileValue} ${styles.goldValue}`}>
             {getNextRewardText()}
           </div>
+          <div className={styles.tileSubGold}>Next daily unlock</div>
         </div>
       </div>
     </div>

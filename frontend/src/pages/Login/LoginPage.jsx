@@ -1,29 +1,43 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import confetti from 'canvas-confetti';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
-import { VeloopLogo } from '../../assets/index.jsx';
-import { ArrowRight, Loader2, Sparkles } from 'lucide-react';
-import styles from './Login.module.css';
+import BrandPanel from './components/BrandPanel.jsx';
+import StreakPath from './components/StreakPath.jsx';
+import LoginCard from './components/LoginCard.jsx';
+import styles from './LoginPage.module.css';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isShaking, setIsShaking] = useState(false);
 
   const { login } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const handleFillDemo = () => {
-    setEmail('demo@veloop.test');
-    setPassword('Demo@1234');
-    showToast('Demo credentials autofilled', 'info', 2000);
+  const handleQuickFill = (demoEmail, demoPass) => {
+    setEmail(demoEmail);
+    setPassword(demoPass);
+    setErrorMessage('');
+    if (demoEmail === 'demo@veloop.test') {
+      showToast('Demo credentials autofilled', 'info', 2000);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+
     if (!email || !password) {
+      setErrorMessage('Please enter both email and password');
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
       showToast('Please enter both email and password', 'warning');
       return;
     }
@@ -31,94 +45,78 @@ export function LoginPage() {
     setIsLoading(true);
     try {
       await login(email, password);
+
+      // Trigger celebratory confetti burst on successful auth
+      try {
+        confetti({
+          particleCount: 75,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#FFC93C', '#8B5CF6', '#34D399', '#38BDF8', '#F59E0B'],
+        });
+      } catch {
+        // Silently continue if canvas is unavailable
+      }
+
+      setIsSuccess(true);
       showToast('Welcome back to VELoop Rewards!', 'success');
-      navigate('/daily-streak');
+
+      // Brief pause for checkmark morph & confetti celebration before redirecting
+      setTimeout(() => {
+        navigate('/daily-streak');
+      }, 500);
     } catch (err) {
-      showToast(err.message || 'Invalid credentials', 'error');
+      const msg = err.message || 'Invalid email or password';
+      setErrorMessage(msg);
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+      showToast(msg, 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={styles.authWrapper}>
-      <div className={styles.authCard}>
-        <div className={styles.logoHeader}>
-          <VeloopLogo size={52} />
-          <h1 className={styles.brandTitle}>
-            VELoop <span style={{ color: 'var(--gold-text)' }}>Rewards</span>
-          </h1>
-          <p className={styles.brandSub}>Log in to access your 7-day streak</p>
-        </div>
+    <div className={styles.splitPageContainer}>
+      {/* Background Atmosphere Blobs */}
+      <div className={styles.ambientBlob1} aria-hidden="true" />
+      <div className={styles.ambientBlob2} aria-hidden="true" />
 
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="login-email">
-              Email Address
-            </label>
-            <input
-              id="login-email"
-              type="email"
-              className={styles.input}
-              placeholder="name@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              required
-            />
+      {/* Main Split-Screen Layout */}
+      <div className={styles.splitGrid}>
+        {/* Left Side: Brand Showcase Hero (Desktop only, ~55%) */}
+        <section className={styles.leftPanel}>
+          <BrandPanel />
+        </section>
+
+        {/* Mobile-Only Top Compact Header Banner */}
+        <section className={styles.mobileHeroBanner} aria-hidden="true">
+          <div className={styles.mobileBrandHeader}>
+            <span className={styles.mobileTag}>VELoop Rewards</span>
+            <h2 className={styles.mobileHeadline}>
+              Show up daily. <span className={styles.mobileGold}>Earn bigger.</span>
+            </h2>
           </div>
+          <StreakPath isCompact={true} />
+        </section>
 
-          <div className={styles.formGroup}>
-            <label className={styles.label} htmlFor="login-password">
-              Password
-            </label>
-            <input
-              id="login-password"
-              type="password"
-              className={styles.input}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </div>
-
-          <button type="submit" className={styles.primaryBtn} disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 size={18} className="animate-spin" />
-                Signing in...
-              </>
-            ) : (
-              <>
-                Sign In <ArrowRight size={18} />
-              </>
-            )}
-          </button>
-        </form>
-
-        {/* Evaluation Demo Credentials Hint */}
-        <div className={styles.demoBanner}>
-          <div className={styles.demoTop}>
-            <span className="d-flex align-items-center gap-1">
-              <Sparkles size={14} /> Evaluation Account
-            </span>
-            <button type="button" className={styles.fillBtn} onClick={handleFillDemo}>
-              Quick Fill
-            </button>
-          </div>
-          <div className={styles.demoDetails}>
-            demo@veloop.test / Demo@1234
-          </div>
-        </div>
-
-        <div className={styles.footerLink}>
-          Don&apos;t have an account?{' '}
-          <Link to="/register" style={{ fontWeight: 600 }}>
-            Create one
-          </Link>
-        </div>
+        {/* Right Side: Glassmorphism Login Card (~45%) */}
+        <section className={styles.rightPanel}>
+          <LoginCard
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            rememberMe={rememberMe}
+            setRememberMe={setRememberMe}
+            isLoading={isLoading}
+            isSuccess={isSuccess}
+            errorMessage={errorMessage}
+            isShaking={isShaking}
+            onSubmit={handleSubmit}
+            onQuickFill={handleQuickFill}
+          />
+        </section>
       </div>
     </div>
   );

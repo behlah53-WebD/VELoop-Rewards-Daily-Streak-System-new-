@@ -50,6 +50,41 @@ export async function normalizeDatabaseCase(uri) {
   return normalizedUri;
 }
 
+export async function cleanupLegacyIndexes(connection) {
+  try {
+    const db = connection.db;
+    if (!db) return;
+
+    const obsoleteIndexes = [
+      { collection: 'wallets', index: 'user_1' },
+      { collection: 'streakcycles', index: 'user_1_cycleNumber_1' },
+      { collection: 'streakcycles', index: 'user_1_status_1' },
+      { collection: 'streakclaims', index: 'user_1_cycle_1_day_1' },
+      { collection: 'streakclaims', index: 'user_1_claimedAt_-1' },
+      { collection: 'wallettransactions', index: 'reference_1' },
+      { collection: 'wallettransactions', index: 'user_1_createdAt_-1' },
+      { collection: 'auditlogs', index: 'user_1_createdAt_-1' },
+    ];
+
+    for (const item of obsoleteIndexes) {
+      try {
+        const col = db.collection(item.collection);
+        const exists = await col.indexExists(item.index);
+        if (exists) {
+          await col.dropIndex(item.index);
+          console.log(`[Database] Dropped legacy index '${item.index}' from '${item.collection}'`);
+        }
+      } catch (colErr) {
+        if (colErr.code !== 26 && colErr.code !== 27) {
+          console.warn(`[Database] Notice dropping index ${item.index}: ${colErr.message}`);
+        }
+      }
+    }
+  } catch (err) {
+    console.warn(`[Database] Legacy index cleanup notice: ${err.message}`);
+  }
+}
+
 export async function connectDB(rawUri = env.MONGO_URI) {
   if (isConnected || mongoose.connection.readyState === 1) {
     return mongoose.connection;
@@ -64,6 +99,7 @@ export async function connectDB(rawUri = env.MONGO_URI) {
 
     isConnected = true;
     console.log(`[Database] MongoDB Connected: ${conn.connection.host} (Database: ${conn.connection.name})`);
+    await cleanupLegacyIndexes(conn.connection);
     return conn.connection;
   } catch (error) {
     console.error(`[Database] MongoDB Connection Error: ${error.message}`);

@@ -6,18 +6,17 @@
   will-change: transform;
 }
 
-/* Restrained, premium animations */
+/* Premium GPU-accelerated micro-interactions */
 .float {
-  animation: floatAnim 4s ease-in-out infinite;
+  animation: floatAnim 4.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .pulse {
-  animation: pulseAnim 3s ease-in-out infinite;
+  animation: pulseAnim 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .glow {
-  filter: drop-shadow(0 0 16px rgba(255, 200, 61, 0.45));
-  animation: glowAnim 2.5s ease-in-out infinite alternate;
+  animation: glowAnim 2.8s ease-in-out infinite alternate;
 }
 
 .shine {
@@ -25,30 +24,47 @@
   overflow: hidden;
 }
 
+.spin {
+  animation: spinAnim 12s linear infinite;
+}
+
 @keyframes floatAnim {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-8px) rotate(1.5deg);
   }
 }
 
 @keyframes pulseAnim {
   0%, 100% {
     transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(255, 201, 60, 0.3));
   }
   50% {
-    transform: scale(1.04);
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 22px rgba(255, 201, 60, 0.65));
   }
 }
 
 @keyframes glowAnim {
   0% {
-    filter: drop-shadow(0 0 8px rgba(255, 200, 61, 0.3));
+    filter: drop-shadow(0 0 10px rgba(255, 201, 60, 0.35));
+    transform: scale(1);
   }
   100% {
-    filter: drop-shadow(0 0 20px rgba(255, 200, 61, 0.65));
+    filter: drop-shadow(0 0 26px rgba(255, 201, 60, 0.75)) drop-shadow(0 0 40px rgba(139, 92, 246, 0.35));
+    transform: scale(1.03);
+  }
+}
+
+@keyframes spinAnim {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -56,7 +72,8 @@
 @media (prefers-reduced-motion: reduce) {
   .float,
   .pulse,
-  .glow {
+  .glow,
+  .spin {
     animation: none !important;
     transform: none !important;
     filter: none !important;

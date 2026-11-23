@@ -74,6 +74,10 @@ export function DailyStreakPage() {
 
   return (
     <div className={styles.pageWrapper}>
+      {/* Ambient background lighting */}
+      <div className={styles.ambientBlobTop} aria-hidden="true" />
+      <div className={styles.ambientBlobBottom} aria-hidden="true" />
+
       <StreakHeader walletBalance={wallet.VES} />
 
       <main className={styles.mainContainer}>
@@ -119,7 +123,8 @@ export function DailyStreakPage() {
 
         {/* Don't Miss Out Callout Panel */}
         <div className={styles.dontMissOutPanel}>
-          <Sparkles size={18} color="var(--gold-start)" />
+          <div className={styles.lightStreak} aria-hidden="true" />
+          <Sparkles size={20} className={styles.sparkleIcon} />
           <p className={styles.dontMissOutText}>
             Don&apos;t Miss Out —{' '}
             <span className={styles.dontMissOutGold}>

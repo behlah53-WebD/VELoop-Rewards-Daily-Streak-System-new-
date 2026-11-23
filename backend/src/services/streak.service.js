@@ -41,10 +41,20 @@ export class StreakService {
         resetNoticeAcknowledged: false,
       });
 
-      if (session) {
-        await cycle.save({ session });
-      } else {
-        await cycle.save();
+      try {
+        if (session) {
+          await cycle.save({ session });
+        } else {
+          await cycle.save();
+        }
+      } catch (err) {
+        if (err.code === 11000) {
+          let retryQuery = StreakCycle.findOne({ userId, status: 'ACTIVE' });
+          if (session) retryQuery = retryQuery.session(session);
+          const existingCycle = await retryQuery;
+          if (existingCycle) return existingCycle;
+        }
+        throw err;
       }
     }
 
@@ -119,10 +129,20 @@ export class StreakService {
       resetNoticeAcknowledged: false,
     });
 
-    if (session) {
-      await newCycle.save({ session });
-    } else {
-      await newCycle.save();
+    try {
+      if (session) {
+        await newCycle.save({ session });
+      } else {
+        await newCycle.save();
+      }
+    } catch (err) {
+      if (err.code === 11000) {
+        let retryQuery = StreakCycle.findOne({ userId, status: 'ACTIVE' });
+        if (session) retryQuery = retryQuery.session(session);
+        const existingCycle = await retryQuery;
+        if (existingCycle) return { cycle: existingCycle, resetNotice };
+      }
+      throw err;
     }
 
     const resetNotice = {

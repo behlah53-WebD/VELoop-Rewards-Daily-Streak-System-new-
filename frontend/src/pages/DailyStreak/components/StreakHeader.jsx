@@ -17,29 +17,43 @@ export function StreakHeader({ walletBalance = 0 }) {
             className={styles.backBtn}
             onClick={() => navigate(-1)}
             aria-label="Go back"
+            title="Go back"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={20} className={styles.backIcon} />
           </button>
-          <h1 className={styles.pageTitle}>
-            Daily Streak <Flame size={20} className={styles.flameIcon} />
-          </h1>
+
+          <div className={styles.brandTitleWrap}>
+            <h1 className={styles.pageTitle}>
+              Daily Streak
+              <span className={styles.flameWrap}>
+                <Flame size={21} className={styles.flameIcon} />
+                <span className={styles.flameGlow} aria-hidden="true" />
+              </span>
+            </h1>
+          </div>
         </div>
 
         <div className={styles.rightSection}>
           <div className={styles.balancePill} title="Your current VE balance">
-            <GemIcon size={18} />
+            <span className={styles.gemWrap}>
+              <GemIcon size={19} />
+            </span>
             <span className={styles.balanceValue}>{walletBalance} VEs</span>
+            <span className={styles.pillShimmer} aria-hidden="true" />
           </div>
 
-          <button
-            type="button"
-            className={styles.logoutBtn}
-            onClick={logout}
-            title="Log out"
-            aria-label="Log out"
-          >
-            <LogOut size={16} />
-          </button>
+          <div className={styles.logoutWrapper}>
+            <button
+              type="button"
+              className={styles.logoutBtn}
+              onClick={logout}
+              title="Log out"
+              aria-label="Log out"
+            >
+              <LogOut size={17} />
+            </button>
+            <span className={styles.logoutTooltip}>Logout</span>
+          </div>
         </div>
       </div>
     </header>

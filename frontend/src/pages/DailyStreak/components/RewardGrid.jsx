@@ -14,12 +14,12 @@ export function RewardGrid({
 
   if (!rewards || rewards.length === 0) return null;
 
-  // On wide desktop (>=1100px), display 7 cards in a single row
+  // On wide desktop (>=1100px), display all 7 cards in a single majestic row
   if (isDesktop && rewards.length === 7) {
     return (
       <div className={styles.gridContainer}>
         <div className={styles.desktopRow}>
-          {rewards.map((rewardItem) => (
+          {rewards.map((rewardItem, index) => (
             <RewardCard
               key={rewardItem.day}
               rewardItem={rewardItem}
@@ -28,6 +28,7 @@ export function RewardGrid({
               onClaimClick={onClaimClick}
               onUnlocked={onUnlocked}
               isClaiming={isClaiming}
+              index={index}
             />
           ))}
         </div>
@@ -35,14 +36,14 @@ export function RewardGrid({
     );
   }
 
-  // Mobile / Tablet: 4 cards in Row 1 + 3 cards in Row 2
+  // Tablet: 4 cards in Row 1 + 3 cards in Row 2
   const row1Cards = rewards.slice(0, 4);
   const row2Cards = rewards.slice(4);
 
   return (
     <div className={styles.gridContainer}>
       <div className={styles.row1}>
-        {row1Cards.map((rewardItem) => (
+        {row1Cards.map((rewardItem, index) => (
           <RewardCard
             key={rewardItem.day}
             rewardItem={rewardItem}
@@ -51,12 +52,13 @@ export function RewardGrid({
             onClaimClick={onClaimClick}
             onUnlocked={onUnlocked}
             isClaiming={isClaiming}
+            index={index}
           />
         ))}
       </div>
 
       <div className={styles.row2}>
-        {row2Cards.map((rewardItem) => (
+        {row2Cards.map((rewardItem, index) => (
           <RewardCard
             key={rewardItem.day}
             rewardItem={rewardItem}
@@ -65,6 +67,7 @@ export function RewardGrid({
             onClaimClick={onClaimClick}
             onUnlocked={onUnlocked}
             isClaiming={isClaiming}
+            index={index + 4}
           />
         ))}
       </div>

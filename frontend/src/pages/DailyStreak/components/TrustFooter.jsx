@@ -6,7 +6,8 @@ export function TrustFooter() {
       <div className={styles.inner}>
         <div className={styles.brandSide}>
           <div className={styles.shieldBadge} title="Verified VELoop Rewards Trust Mark">
-            VR
+            <span className={styles.shieldText}>VR</span>
+            <span className={styles.shieldGlow} aria-hidden="true" />
           </div>
           <p className={styles.trustText}>
             Official rewards only on <span className={styles.officialDomain}>VeloopRewards.in</span> · Stay active, stay rewarded!
