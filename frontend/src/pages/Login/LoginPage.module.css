@@ -6,7 +6,7 @@
   justify-content: center;
   padding: var(--space-6) var(--space-4);
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
   background-color: var(--bg-0);
   background-image: var(--bg-gradient);
 }

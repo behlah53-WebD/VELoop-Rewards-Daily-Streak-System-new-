@@ -4,7 +4,7 @@
   flex-direction: column;
   background-color: transparent;
   color: var(--text-1);
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
   position: relative;
 }
