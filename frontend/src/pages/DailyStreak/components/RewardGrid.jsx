@@ -92,57 +92,32 @@ export function RewardGrid({
     );
   }
 
-  /* ── MOBILE: scroll-snap carousel, today's card first ── */
-  // Sort: AVAILABLE/TODAY first, then by day
-  const sortedRewards = [...rewards].sort((a, b) => {
-    const priority = { AVAILABLE: 0, TODAY: 1, CLAIMED: 2, LOCKED: 3, MISSED: 4 };
-    if (a.isUltimate) return 1;
-    if (b.isUltimate) return -1;
-    if (a.status !== b.status) return (priority[a.status] ?? 5) - (priority[b.status] ?? 5);
-    return a.day - b.day;
-  });
-
-  const nonVipMobile = sortedRewards.filter((r) => !r.isUltimate);
-
+  /* ── MOBILE (< 768px): 3×2 grid (Days 1–6) + full-width Day 7 VIP finale card ── */
   return (
     <div className={styles.gridSection}>
       <div className={styles.mobileLayout}>
-        <div className={styles.mobileCarousel}>
-          {nonVipMobile.map((rewardItem, idx) => {
-            const isHero = rewardItem.status === 'AVAILABLE';
-            return (
-              <div
-                key={rewardItem.day}
-                className={`${styles.mobileCardSlot} ${isHero ? styles.mobileCardSlotHero : ''}`}
-              >
-                <RewardCard
-                  rewardItem={rewardItem}
-                  index={idx}
-                  {...sharedCardProps}
-                />
-              </div>
-            );
-          })}
-
-          {day7 && (
-            <div className={styles.mobileVipSlot}>
-              <VipCard
-                ultimateReward={day7.reward}
-                currentDay={day7.day}
-                rewardItem={day7}
-                onClaimClick={onClaimClick}
-                isClaiming={isClaiming}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Pagination dots (decorative) */}
-        <div className={styles.mobileDots} aria-hidden="true">
-          {rewards.map((_, i) => (
-            <div key={i} className={`${styles.mobileDot} ${i === 0 ? styles.mobileDotActive : ''}`} />
+        <div className={styles.mobileDaysGrid}>
+          {days1to6.map((rewardItem, idx) => (
+            <RewardCard
+              key={rewardItem.day}
+              rewardItem={rewardItem}
+              index={idx}
+              {...sharedCardProps}
+            />
           ))}
         </div>
+
+        {day7 && (
+          <div className={styles.mobileVipSlot}>
+            <VipCard
+              ultimateReward={day7.reward}
+              currentDay={day7.day}
+              rewardItem={day7}
+              onClaimClick={onClaimClick}
+              isClaiming={isClaiming}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

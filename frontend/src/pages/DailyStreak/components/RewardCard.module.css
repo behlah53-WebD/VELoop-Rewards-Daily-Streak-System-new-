@@ -691,37 +691,358 @@
   font-weight: 700;
 }
 
+.desktopRewardInfo {
+  display: block;
+}
+
+.mobileRewardInfo {
+  display: none;
+}
+
+.desktopLockContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mobileLockContent {
+  display: none;
+}
+
+.desktopBtnText {
+  display: inline;
+}
+
+.mobileBtnText {
+  display: none;
+}
+
 /* =====================================================================
-   MOBILE — compact horizontal card layout
+   MOBILE — 3x2 grid compact cards, perfectly aligned, visible states
    ===================================================================== */
 
-@media (max-width: 600px) {
+@media (max-width: 767.98px) {
   .card {
-    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    border-radius: 16px;
+    min-height: 164px;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(22, 13, 58, 0.88) 0%, rgba(11, 6, 32, 0.96) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 6px 16px -2px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 150ms ease, box-shadow 150ms ease;
   }
 
-  .assetStage {
-    padding: 6px 0 2px;
-  }
-
-  .assetFloor {
-    width: 54px;
+  .card:active {
+    transform: scale(0.98);
   }
 
   .cardHeader {
-    padding: 8px 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 2px;
+    gap: 2px;
+    height: auto;
   }
 
+  .dayPill {
+    font-size: 0.55rem;
+    font-weight: 850;
+    padding: 2px 5px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .typeChip {
+    font-size: 0.5rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* Art Medallion: 52px circle */
+  .assetStage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 52px;
+    height: 52px;
+    margin: 2px 0;
+    flex-shrink: 0;
+    padding: 0;
+  }
+
+  .assetSpotlight {
+    width: 48px;
+    height: 48px;
+    filter: blur(10px);
+    opacity: 0.85;
+  }
+
+  .assetFloor {
+    width: 36px;
+    height: 6px;
+    bottom: -2px;
+  }
+
+  .assetWrap {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+  }
+
+  .assetWrap div,
+  .assetWrap img,
+  .assetWrap svg {
+    max-width: 42px !important;
+    max-height: 42px !important;
+  }
+
+  /* Badges on corner of art */
+  .claimedStamp {
+    width: 17px;
+    height: 17px;
+    right: -4px;
+    top: 0;
+    transform: none;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+  }
+
+  .claimedStamp svg {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .lockBadge {
+    width: 17px;
+    height: 17px;
+    left: auto;
+    right: -4px;
+    top: 0;
+    transform: none;
+    background: rgba(14, 8, 40, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--gold-start);
+  }
+
+  .lockBadge svg {
+    width: 9px !important;
+    height: 9px !important;
+  }
+
+  /* States on mobile */
+  .cardClaimed {
+    border-color: rgba(52, 211, 153, 0.45);
+    background: linear-gradient(160deg, rgba(12, 38, 28, 0.82) 0%, rgba(10, 8, 38, 0.95) 85%);
+    box-shadow:
+      0 6px 16px -2px rgba(0, 0, 0, 0.55),
+      0 0 14px rgba(52, 211, 153, 0.22);
+  }
+
+  .cardAvailable {
+    border-color: rgba(255, 201, 60, 0.6);
+    background: linear-gradient(160deg, rgba(42, 22, 75, 0.92) 0%, rgba(18, 10, 50, 0.98) 100%);
+    box-shadow:
+      0 8px 20px -2px rgba(0, 0, 0, 0.65),
+      0 0 18px rgba(255, 201, 60, 0.4);
+    transform: none;
+  }
+
+  .cardAvailable:hover {
+    transform: none;
+  }
+
+  .cardToday {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow:
+      0 6px 18px -2px rgba(0, 0, 0, 0.6),
+      0 0 14px rgba(139, 92, 246, 0.3);
+  }
+
+  .cardLocked {
+    opacity: 0.92;
+    border-color: rgba(255, 255, 255, 0.07);
+    background: linear-gradient(160deg, rgba(20, 13, 50, 0.85) 0%, rgba(12, 8, 32, 0.95) 100%);
+  }
+
+  .cardLocked .assetWrap {
+    filter: brightness(0.88) saturate(0.8) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  }
+
+  /* Reward Info — 2 lines with fixed min-height so all 6 cards line up */
   .rewardInfo {
-    padding: 2px 10px 4px;
+    width: 100%;
+    padding: 0 2px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0;
   }
 
+  .desktopRewardInfo {
+    display: none;
+  }
+
+  .mobileRewardInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 28px;
+  }
+
+  .mobileAmount {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 850;
+    line-height: 1.15;
+    color: var(--text-1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .mobileSubLabel {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--text-3);
+    line-height: 1.1;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Footer action pill: 28px tall, full width */
   .cardFooter {
-    padding: 0 10px 10px;
+    width: 100%;
+    padding: 0;
+    min-height: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .cardValue {
-    font-size: 0.95rem;
+  .claimedPill {
+    width: 100%;
+    min-height: 28px;
+    height: 28px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    gap: 3px;
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.2);
+  }
+
+  .claimedPill svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .claimBtn {
+    width: 100%;
+    min-height: 28px;
+    height: 28px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 850;
+    gap: 2px;
+  }
+
+  .claimBtn svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .desktopBtnText {
+    display: none;
+  }
+
+  .mobileBtnText {
+    display: inline;
+  }
+
+  .countdownPill {
+    width: 100%;
+    min-height: 28px;
+    height: 28px;
+    padding: 2px 3px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    gap: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdownPill svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .countdownLabel {
+    display: none; /* Hide 'Unlocks in' on mobile so HH:MM:SS fits prominently */
+  }
+
+  .countdownText {
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+  }
+
+  .lockedPill {
+    width: 100%;
+    min-height: 28px;
+    height: 28px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    flex-direction: row;
+    gap: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .desktopLockContent {
+    display: none;
+  }
+
+  .mobileLockContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 0.66rem;
+    font-weight: 750;
+    color: rgba(204, 193, 237, 0.75);
+  }
+
+  .mobileLockContent svg {
+    width: 10px;
+    height: 10px;
+    color: rgba(204, 193, 237, 0.6);
   }
 }
 

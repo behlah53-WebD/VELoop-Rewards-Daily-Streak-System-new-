@@ -1,4 +1,4 @@
-import { Check, Crown } from 'lucide-react';
+import { Check, Crown, Lock } from 'lucide-react';
 import styles from './ProgressRail.module.css';
 
 export function ProgressRail({ currentDay = 1, claimedDays = [], totalDays = 7 }) {
@@ -45,6 +45,11 @@ export function ProgressRail({ currentDay = 1, claimedDays = [], totalDays = 7 }
                   <Check size={14} strokeWidth={3} className={styles.checkIcon} />
                 ) : isDay7 ? (
                   <Crown size={14} className={styles.crownNodeIcon} />
+                ) : isUpcoming ? (
+                  <>
+                    <span className={styles.desktopDayNum}>{day}</span>
+                    <Lock size={12} className={styles.mobileLockIcon} aria-hidden="true" />
+                  </>
                 ) : (
                   <span>{day}</span>
                 )}

@@ -1,5 +1,5 @@
 import { AnimatedAsset } from '../../../components/AnimatedAsset/AnimatedAsset.jsx';
-import { Lock, Sparkles, CheckCircle2, ChevronRight, Crown } from 'lucide-react';
+import { Lock, CheckCircle2, ChevronRight, Crown } from 'lucide-react';
 import styles from './UltimateReward.module.css';
 
 export function UltimateReward({ ultimateReward, currentDay = 1, rewardItem, onClaimClick, isClaiming }) {
@@ -11,6 +11,44 @@ export function UltimateReward({ ultimateReward, currentDay = 1, rewardItem, onC
 
   // Calculate completed days (0 to 7) based on currentDay — LOGIC UNCHANGED
   const completedDays = Math.max(0, Math.min(isClaimed ? 7 : currentDay - 1, 7));
+
+  const renderVipAction = () => {
+    if (isClaimed) {
+      return (
+        <div className={styles.vipClaimedPill}>
+          <CheckCircle2 size={16} />
+          <span>Claimed on Day 7</span>
+        </div>
+      );
+    }
+
+    if (isAvailable) {
+      return (
+        <button
+          type="button"
+          className={styles.vipClaimBtn}
+          onClick={() => onClaimClick && onClaimClick(day)}
+          disabled={isClaiming}
+          aria-label="Claim VIP Day 7 reward"
+        >
+          <span className={styles.vipBtnSweep} aria-hidden="true" />
+          <Crown size={15} />
+          <span>{isClaiming ? 'Claiming…' : 'Claim Ultimate Reward'}</span>
+          <ChevronRight size={15} />
+        </button>
+      );
+    }
+
+    return (
+      <div className={styles.vipLockPill}>
+        <span className={styles.pillSweep} aria-hidden="true" />
+        <Lock size={15} className={styles.vipLockIcon} />
+        <span>
+          Unlock on <strong className={styles.boldDay}>Day 7</strong>
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.vipCard}>
@@ -27,7 +65,8 @@ export function UltimateReward({ ultimateReward, currentDay = 1, rewardItem, onC
       </div>
       <div className={styles.metalShimmer} aria-hidden="true" />
 
-      <div className={styles.vipContent}>
+      {/* ── DESKTOP & TABLET VIEW (>= 768px): 100% untouched ── */}
+      <div className={styles.desktopVipContent}>
         {/* Top VIP badge */}
         <div className={styles.vipBadge}>
           <Crown size={11} />
@@ -75,33 +114,55 @@ export function UltimateReward({ ultimateReward, currentDay = 1, rewardItem, onC
 
         {/* Action area */}
         <div className={styles.vipAction}>
-          {isClaimed ? (
-            <div className={styles.vipClaimedPill}>
-              <CheckCircle2 size={18} />
-              <span>Claimed on Day 7</span>
+          {renderVipAction()}
+        </div>
+      </div>
+
+      {/* ── MOBILE VIEW (< 768px): compact horizontal finale ── */}
+      <div className={styles.mobileVipContent}>
+        <div className={styles.mobileTopRow}>
+          {/* Left: Crown stage (84px) */}
+          <div className={styles.mobileCrownStage}>
+            <div className={styles.mobileCrownAura} aria-hidden="true" />
+            <div className={styles.mobileCrownInner}>
+              <AnimatedAsset type="crown" size={72} animation="glow" alt="Ultimate crown reward" />
             </div>
-          ) : isAvailable ? (
-            <button
-              type="button"
-              className={styles.vipClaimBtn}
-              onClick={() => onClaimClick && onClaimClick(day)}
-              disabled={isClaiming}
-              aria-label="Claim VIP Day 7 reward"
-            >
-              <span className={styles.vipBtnSweep} aria-hidden="true" />
-              <Crown size={16} />
-              <span>{isClaiming ? 'Claiming…' : 'Claim Ultimate Reward'}</span>
-              <ChevronRight size={16} />
-            </button>
-          ) : (
-            <div className={styles.vipLockPill}>
-              <span className={styles.pillSweep} aria-hidden="true" />
-              <Lock size={16} className={styles.vipLockIcon} />
-              <span>
-                Unlock on <strong className={styles.boldDay}>Day 7</strong>
-              </span>
+          </div>
+
+          {/* Right: Info block */}
+          <div className={styles.mobileRightInfo}>
+            <div className={styles.mobileVipBadge}>
+              <Crown size={10} />
+              <span>VIP · ULTIMATE REWARD</span>
             </div>
-          )}
+            <span className={styles.mobileBrandChip}>AMAZON GIFT CARD</span>
+            <div className={styles.mobileVipHeadline}>₹{amount} Gift Card</div>
+            <p className={styles.mobileVipSubtext}>The grand finale of your 7-day streak</p>
+          </div>
+        </div>
+
+        {/* Segmented 7-day progress bar */}
+        <div className={styles.mobileProgressRow}>
+          <div className={styles.mobileProgressDots} aria-label={`${completedDays} of 7 days completed`}>
+            {Array.from({ length: 7 }, (_, i) => {
+              const dotDay = i + 1;
+              const isFilled = dotDay < completedDays + 1;
+              const isActive = dotDay === completedDays + 1 && !isClaimed;
+              return (
+                <div
+                  key={dotDay}
+                  className={`${styles.mobileProgressDot} ${isFilled ? styles.mobileProgressDotFilled : ''} ${isActive ? styles.mobileProgressDotActive : ''}`}
+                  title={`Day ${dotDay}`}
+                />
+              );
+            })}
+          </div>
+          <span className={styles.mobileProgressLabel}>{completedDays} of 7 days completed</span>
+        </div>
+
+        {/* Full-width Action CTA */}
+        <div className={styles.mobileActionSlot}>
+          {renderVipAction()}
         </div>
       </div>
     </div>

@@ -70,81 +70,28 @@
   width: 100%;
 }
 
-/* ── MOBILE LAYOUT (<768px): scroll-snap carousel ── */
+/* ── MOBILE LAYOUT (<768px): 3×2 Grid + Day 7 VIP finale card ── */
 .mobileLayout {
-  position: relative;
-}
-
-.mobileCarousel {
   display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: var(--space-4);
-  padding-left: 16px;
-  padding-right: 16px;
-  margin: 0 -16px;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
 }
 
-.mobileCarousel::-webkit-scrollbar {
-  height: 3px;
-}
-
-.mobileCarousel::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.4);
-  border-radius: var(--radius-full);
-}
-
-.mobileCarousel::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.mobileCardSlot {
-  flex: 0 0 72vw;
-  max-width: 280px;
-  scroll-snap-align: center;
-  display: flex;
-}
-
-/* Today's card is larger on mobile */
-.mobileCardSlotHero {
-  flex: 0 0 82vw;
-  max-width: 320px;
+.mobileDaysGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  align-items: stretch;
 }
 
 .mobileVipSlot {
-  flex: 0 0 88vw;
-  max-width: 360px;
-  scroll-snap-align: center;
+  width: 100%;
   display: flex;
 }
 
-/* Pagination dots */
-.mobileDots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 12px;
-}
-
-.mobileDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  transition: background 180ms, width 180ms;
-}
-
-.mobileDotActive {
-  width: 20px;
-  border-radius: 3px;
-  background: var(--gold-primary);
-}
-
-/* ── ALL CARDS STRETCH to equal height ── */
+/* ── ALL CARDS STRETCH to equal height on desktop/tablet ── */
 .daysGrid > *,
 .tabletDaysGrid > * {
   min-height: 280px;
@@ -154,12 +101,5 @@
   .daysGrid > *,
   .tabletDaysGrid > * {
     min-height: 260px;
-  }
-}
-
-@media (max-width: 600px) {
-  .mobileCardSlot,
-  .mobileCardSlotHero {
-    min-height: 300px;
   }
 }

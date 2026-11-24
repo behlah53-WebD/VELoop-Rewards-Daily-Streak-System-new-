@@ -86,9 +86,14 @@ export function RewardCard({
           >
             <span className={styles.btnSweep} aria-hidden="true" />
             <span className={styles.btnLabel}>
-              {isClaiming ? 'Claiming…' : 'Claim Now'}
+              {isClaiming ? 'Claiming…' : (
+                <>
+                  <span className={styles.desktopBtnText}>Claim Now</span>
+                  <span className={styles.mobileBtnText}>Claim</span>
+                </>
+              )}
             </span>
-            <ChevronRight size={15} className={styles.btnArrow} />
+            <ChevronRight size={14} className={styles.btnArrow} />
           </button>
         );
 
@@ -100,7 +105,7 @@ export function RewardCard({
             aria-live="polite"
             aria-label={`Unlocks in ${countdown.formattedTime}`}
           >
-            <Clock size={13} className={styles.clockIcon} />
+            <Clock size={12} className={styles.clockIcon} />
             <span className={styles.countdownLabel}>Unlocks in</span>
             <span className={styles.countdownText}>{countdown.formattedTime}</span>
           </div>
@@ -116,11 +121,17 @@ export function RewardCard({
       default:
         return (
           <div className={styles.lockedPill}>
-            <div className={styles.lockPillRow}>
-              <Lock size={12} className={styles.lockIcon} />
-              <span>Locked</span>
+            <div className={styles.desktopLockContent}>
+              <div className={styles.lockPillRow}>
+                <Lock size={12} className={styles.lockIcon} />
+                <span>Locked</span>
+              </div>
+              <span className={styles.unlockDay}>Unlocks Day {day}</span>
             </div>
-            <span className={styles.unlockDay}>Unlocks Day {day}</span>
+            <div className={styles.mobileLockContent}>
+              <Lock size={10} className={styles.lockIcon} />
+              <span>Day {day}</span>
+            </div>
           </div>
         );
     }
@@ -188,11 +199,28 @@ export function RewardCard({
 
       {/* ── ROW 3: Reward Info ── */}
       <div className={styles.rewardInfo}>
-        <div className={styles.cardCategory}>
-          {isUltimate ? 'Ultimate Reward' : 'Daily Reward'}
+        {/* Desktop category & title */}
+        <div className={styles.desktopRewardInfo}>
+          <div className={styles.cardCategory}>
+            {isUltimate ? 'Ultimate Reward' : 'Daily Reward'}
+          </div>
+          <div className={`${styles.cardValue} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
+            {reward?.title || `+${reward?.amount} VEs`}
+          </div>
         </div>
-        <div className={`${styles.cardValue} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
-          {reward?.title || `+${reward?.amount} VEs`}
+
+        {/* Mobile compact 2-line layout */}
+        <div className={styles.mobileRewardInfo}>
+          <div className={`${styles.mobileAmount} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
+            {reward?.rewardType === 'GIFT_CARD' || reward?.currency === 'INR'
+              ? `₹${reward?.amount} Gift Card`
+              : (reward?.title || `+${reward?.amount} VEs`)}
+          </div>
+          <div className={styles.mobileSubLabel}>
+            {reward?.rewardType === 'GIFT_CARD' || reward?.currency === 'INR'
+              ? 'Amazon Voucher'
+              : 'Daily Check-in'}
+          </div>
         </div>
       </div>
 
