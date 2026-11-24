@@ -1,8 +1,13 @@
+/* =====================================================================
+   BRAND PANEL — Login left panel
+   Fixed: floating chip overlaps repositioned to safe quadrants
+   ===================================================================== */
+
 .showcasePanel {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 600px;
+  min-height: 580px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,18 +15,18 @@
   border-radius: var(--radius-xl);
   overflow: hidden;
   background: linear-gradient(150deg, rgba(14, 8, 40, 0.95) 0%, rgba(10, 5, 30, 0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7);
 }
 
-/* Living Aurora & Mesh Glow Elements */
+/* Living Aurora & Mesh Glows */
 .meshGlowViolet {
   position: absolute;
   top: -15%;
   left: -10%;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.28) 0%, rgba(109, 40, 217, 0.1) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.26) 0%, rgba(109, 40, 217, 0.1) 50%, transparent 75%);
   filter: blur(60px);
   pointer-events: none;
   animation: auroraMesh1 20s ease-in-out infinite alternate;
@@ -33,7 +38,7 @@
   left: 20%;
   width: 420px;
   height: 420px;
-  background: radial-gradient(circle, rgba(217, 70, 239, 0.18) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.16) 0%, rgba(139, 92, 246, 0.07) 50%, transparent 75%);
   filter: blur(65px);
   pointer-events: none;
   animation: auroraMesh2 24s ease-in-out infinite alternate-reverse;
@@ -45,32 +50,30 @@
   right: -10%;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(255, 201, 60, 0.14) 0%, rgba(245, 158, 11, 0.06) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(255, 201, 60, 0.12) 0%, rgba(245, 158, 11, 0.05) 50%, transparent 75%);
   filter: blur(55px);
   pointer-events: none;
   animation: auroraMesh3 18s ease-in-out infinite alternate;
 }
 
 @keyframes auroraMesh1 {
-  0% { transform: translate(0, 0) scale(1); }
+  0%   { transform: translate(0, 0) scale(1); }
   100% { transform: translate(35px, 25px) scale(1.15); }
 }
-
 @keyframes auroraMesh2 {
-  0% { transform: translate(0, 0) scale(1); }
+  0%   { transform: translate(0, 0) scale(1); }
   100% { transform: translate(-30px, -20px) scale(1.12); }
 }
-
 @keyframes auroraMesh3 {
-  0% { transform: translate(0, 0) scale(1); }
+  0%   { transform: translate(0, 0) scale(1); }
   100% { transform: translate(-25px, 30px) scale(1.18); }
 }
 
-/* Faint grid line texture */
+/* Grid overlay */
 .gridOverlay {
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 36px 36px;
@@ -78,12 +81,8 @@
   pointer-events: none;
 }
 
-/* Twinkling star particles */
-.starryField {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
+/* Twinkling stars */
+.starryField { position: absolute; inset: 0; pointer-events: none; }
 
 .star {
   position: absolute;
@@ -102,10 +101,15 @@
 
 @keyframes starPulse {
   0%, 100% { opacity: 0.2; transform: scale(0.8); }
-  50% { opacity: 0.9; transform: scale(1.3); }
+  50%       { opacity: 0.9; transform: scale(1.3); }
 }
 
-/* Floating Glass Parallax Reward Chips */
+/* ══ FLOATING CHIPS — repositioned to avoid all overlaps ═══════════
+   chip1: top-right corner (clear of text area)
+   chip2: mid-right (below chip1 with 80px gap)
+   chip3: bottom-left (below trust strip area)
+   ═══════════════════════════════════════════════════════════════════ */
+
 .floatingChipsStage {
   position: absolute;
   inset: 0;
@@ -118,58 +122,59 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(22, 13, 58, 0.75);
+  background: rgba(22, 13, 58, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-full);
   padding: 6px 14px;
   font-family: var(--font-heading);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--text-1);
-  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.5), 0 0 16px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.5), 0 0 14px rgba(139, 92, 246, 0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   will-change: transform;
 }
 
+/* Top-right: safe from text */
 .chip1 {
-  top: 14%;
-  right: 10%;
+  top: 10%;
+  right: 8%;
   animation: floatParallax1 5.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
+/* Below chip1, minimum 80px gap */
 .chip2 {
-  top: 48%;
-  right: 4%;
+  top: calc(10% + 72px);
+  right: 6%;
   animation: floatParallax2 6.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 1s;
 }
 
+/* Bottom-left, above trust strip */
 .chip3 {
-  bottom: 22%;
-  left: 6%;
+  bottom: 14%;
+  left: 5%;
   animation: floatParallax3 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite 0.5s;
 }
 
 @keyframes floatParallax1 {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(2deg); }
+  50%       { transform: translateY(-10px) rotate(2deg); }
 }
-
 @keyframes floatParallax2 {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-16px) rotate(-2deg); }
+  50%       { transform: translateY(-14px) rotate(-2deg); }
 }
-
 @keyframes floatParallax3 {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(1.5deg); }
+  50%       { transform: translateY(-8px) rotate(1.5deg); }
 }
 
-.chipGoldIcon { color: var(--gold-start); }
+.chipGoldIcon  { color: var(--gold-start); }
 .chipFlameIcon { color: #ff8533; }
-.chipCyanIcon { color: #38bdf8; }
+.chipCyanIcon  { color: #38bdf8; }
 
-/* Main Content Typography */
+/* Main Content */
 .contentWrap {
   position: relative;
   z-index: 4;
@@ -185,10 +190,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.14);
   border: 1px solid rgba(139, 92, 246, 0.35);
   color: var(--violet-bright);
-  font-size: 0.76rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
@@ -198,7 +203,7 @@
 
 .headline {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
   font-weight: 800;
   line-height: 1.18;
   letter-spacing: -0.03em;
@@ -216,14 +221,14 @@
 
 .subtitle {
   color: var(--text-2);
-  font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+  font-size: clamp(0.9rem, 1.3vw, 1.04rem);
   line-height: 1.6;
-  max-width: 520px;
-  margin-bottom: var(--space-6);
+  max-width: 500px;
+  margin-bottom: var(--space-5);
 }
 
 .pathContainer {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   width: 100%;
 }
 
@@ -247,25 +252,16 @@
   gap: 5px;
 }
 
-.trustIcon {
-  color: #34d399;
-}
+.trustIcon { color: #34d399; }
+.trustDot  { color: var(--text-3); opacity: 0.5; }
 
-.trustDot {
-  color: var(--text-3);
-  opacity: 0.6;
-}
-
-.streakersCount {
-  color: var(--gold-text);
-  font-weight: 800;
-}
-
+/* Responsive */
 @media (max-width: 991px) {
   .showcasePanel {
     padding: var(--space-6) var(--space-4);
     min-height: auto;
   }
+
   .floatingChipsStage {
     display: none;
   }

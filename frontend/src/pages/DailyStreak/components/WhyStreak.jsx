@@ -51,7 +51,7 @@ export function WhyStreak() {
               {item.number}
             </span>
 
-            <div className={styles.iconCircle}>
+            <div className={styles.iconBadge}>
               {item.icon}
             </div>
 

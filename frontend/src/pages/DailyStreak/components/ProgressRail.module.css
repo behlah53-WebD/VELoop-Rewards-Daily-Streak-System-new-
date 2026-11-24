@@ -1,142 +1,72 @@
 .railContainer {
-  margin-bottom: var(--space-6);
-  padding: var(--space-3) var(--space-2);
-  background: rgba(14, 8, 40, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-lg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-.railWrapper {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: 15px 22px 13px;
+  overflow: hidden;
+  border: 1px solid rgba(180, 153, 244, .17);
+  border-radius: 21px;
+  background:
+    radial-gradient(ellipse at 3% 50%, rgba(37, 176, 142, .07), transparent 28%),
+    radial-gradient(ellipse at 100% 50%, rgba(255, 198, 87, .075), transparent 28%),
+    linear-gradient(110deg, rgba(16, 12, 34, .91), rgba(12, 9, 27, .82));
+  box-shadow: 0 13px 35px rgba(3, 2, 12, .25), inset 0 1px rgba(255,255,255,.045);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: railFadeIn .55s cubic-bezier(.22,1,.36,1) .12s backwards;
 }
 
-.trackLine {
+.railContainer::before {
+  content: '';
   position: absolute;
-  top: 17px;
-  left: 20px;
-  right: 20px;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-full);
-  z-index: 1;
-}
-
-.activeTrackLine {
-  position: absolute;
-  top: 17px;
-  left: 20px;
-  height: 4px;
-  background: linear-gradient(90deg, #34d399 0%, #8b5cf6 50%, #ffc93c 100%);
-  border-radius: var(--radius-full);
-  z-index: 2;
-  box-shadow: 0 0 12px rgba(255, 201, 60, 0.4);
-  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.nodeColumn {
-  position: relative;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.node {
-  position: relative;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(22, 13, 58, 0.9);
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: var(--text-2);
-  transition: all var(--transition-base);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-/* Completed / Claimed Node */
-.nodeClaimed {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border-color: #34d399;
-  color: #ffffff;
-  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
-}
-
-.checkIcon {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
-}
-
-/* Active Current Day Node with Pulsing Halo */
-.nodeActive {
-  background: linear-gradient(135deg, #2a164d 0%, #170d32 100%);
-  border-color: #ffc93c;
-  color: var(--gold-text);
-  box-shadow: 0 0 20px rgba(255, 201, 60, 0.6);
-  transform: scale(1.12);
-}
-
-.activeHalo {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 201, 60, 0.5);
-  animation: pulseRailHalo 2s ease-in-out infinite;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(100deg, rgba(68,219,174,.23), rgba(178,145,255,.13) 48%, rgba(255,205,102,.28)) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
   pointer-events: none;
 }
 
-@keyframes pulseRailHalo {
-  0% { transform: scale(0.9); opacity: 0.3; }
-  50% { transform: scale(1.25); opacity: 0.9; }
-  100% { transform: scale(0.9); opacity: 0.3; }
-}
+@keyframes railFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-.crownNodeIcon {
-  color: var(--gold-start);
-  filter: drop-shadow(0 0 4px var(--gold-start));
-}
+.railHeader { position: relative; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 3px 7px; }
+.railTitle { color: rgba(212,201,241,.67); font-size: .59rem; font-weight: 850; letter-spacing: .15em; text-transform: uppercase; }
+.railProgress { color: #ffe09a; font-size: .65rem; font-weight: 850; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.railProgress span { color: rgba(208,196,236,.54); font-weight: 700; }
 
-/* Upcoming Node */
-.nodeUpcoming {
-  background: rgba(14, 8, 40, 0.8);
-  border-color: rgba(255, 255, 255, 0.08);
-  color: var(--text-3);
-}
+.railWrapper { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 4px 10px 1px; }
+.trackLine { position: absolute; top: 23px; left: 30px; right: 30px; height: 2px; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,.1), rgba(255,255,255,.055)); z-index: 1; }
+.activeTrackLine { position: absolute; top: 23px; left: 30px; right: 30px; height: 2px; border-radius: 999px; background: linear-gradient(90deg, #47e0b2 0%, #a77aff 54%, #ffcf69 100%); box-shadow: 0 0 12px rgba(169,128,255,.48); transform: scaleX(var(--progress, 0)); transform-origin: left center; z-index: 2; transition: transform .7s cubic-bezier(.22,1,.36,1); }
 
-.dayCaption {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
+.nodeColumn { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 7px; min-width: 38px; }
+.node { position: relative; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(204,186,245,.15); border-radius: 50%; color: rgba(202,190,231,.52); background: linear-gradient(145deg, #17112d, #100c22); box-shadow: 0 5px 14px rgba(0,0,0,.27), inset 0 1px rgba(255,255,255,.055); font-family: var(--font-heading); font-size: .75rem; font-weight: 850; font-variant-numeric: tabular-nums; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.nodeClaimed { border-color: rgba(73,228,177,.8); color: #fff; background: linear-gradient(145deg, #19c990, #079e75); box-shadow: 0 0 0 4px rgba(50,214,161,.1), 0 0 20px rgba(39,213,159,.27), inset 0 1px rgba(255,255,255,.34); }
+.checkIcon { filter: drop-shadow(0 1px 2px rgba(0,0,0,.28)); }
+.nodeActive { z-index: 2; width: 44px; height: 44px; margin: -3px 0; border: 2px solid #ffca58; color: #ffe5a2; background: radial-gradient(circle at 36% 25%, rgba(103,67,156,.7), #211735 72%); box-shadow: 0 0 0 5px rgba(255,202,88,.08), 0 0 24px rgba(255,193,67,.27), inset 0 1px rgba(255,255,255,.15); font-size: .86rem; }
+.activeHalo { position: absolute; inset: -9px; border: 1px solid rgba(255,206,102,.47); border-radius: 50%; animation: haloPulse 2.4s ease-in-out infinite; pointer-events: none; }
+@keyframes haloPulse { 0%,100% { transform: scale(.92); opacity: .25; } 50% { transform: scale(1.12); opacity: .8; } }
+.nodeUpcoming { color: rgba(199,187,228,.43); border-color: rgba(201,180,243,.12); background: rgba(13,10,28,.84); }
+.crownNodeIcon { color: #ffd16a; filter: drop-shadow(0 0 6px rgba(255,195,65,.45)); }
+.dayCaption { color: rgba(207,195,235,.48); font-size: .57rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.nodeClaimed + .dayCaption { color: #8ce9c8; }.nodeActive + .dayCaption { color: #ffdda0; }
 
 @media (max-width: 575px) {
-  .railContainer {
-    padding: var(--space-2) var(--space-1);
-    margin-bottom: var(--space-4);
-  }
-  .node {
-    width: 28px;
-    height: 28px;
-    font-size: 0.72rem;
-  }
-  .trackLine,
-  .activeTrackLine {
-    top: 14px;
-  }
-  .dayCaption {
-    font-size: 0.65rem;
-  }
+  .railContainer { padding: 13px 11px 12px; border-radius: 17px; }
+  .railHeader { margin: 0 3px 9px; }
+  .railTitle { font-size: .53rem; letter-spacing: .11em; }
+  .railProgress { font-size: .6rem; }
+  .railWrapper { padding: 4px 0 1px; }
+  .nodeColumn { min-width: 30px; gap: 7px; }
+  .node { width: 30px; height: 30px; font-size: .65rem; }
+  .nodeActive { width: 36px; height: 36px; margin: -3px 0; font-size: .74rem; }
+  .trackLine, .activeTrackLine { top: 19px; left: 15px; }
+  .trackLine, .activeTrackLine { right: 15px; }
+  .activeHalo { inset: -6px; }
+  .dayCaption { font-size: .49rem; }
+  .crownNodeIcon, .checkIcon { width: 12px; height: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activeHalo { animation: none !important; }
+  .activeTrackLine, .node { transition: none !important; }
 }

@@ -13,6 +13,10 @@ export function ProgressRail({ currentDay = 1, claimedDays = [], totalDays = 7 }
 
   return (
     <div className={styles.railContainer} aria-label="Streak progression track">
+      <div className={styles.railHeader}>
+        <span className={styles.railTitle}>Your reward path</span>
+        <span className={styles.railProgress}>{claimedDays.length} <span>/ {totalDays} claimed</span></span>
+      </div>
       <div className={styles.railWrapper}>
         {/* Inactive background track */}
         <div className={styles.trackLine} />
@@ -20,7 +24,7 @@ export function ProgressRail({ currentDay = 1, claimedDays = [], totalDays = 7 }
         {/* Active glowing gradient track */}
         <div
           className={styles.activeTrackLine}
-          style={{ width: `${progressPercent}%` }}
+          style={{ '--progress': progressPercent / 100 }}
         />
 
         {days.map((day) => {

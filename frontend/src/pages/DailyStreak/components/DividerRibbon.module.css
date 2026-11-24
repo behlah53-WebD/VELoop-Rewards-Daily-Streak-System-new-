@@ -1,5 +1,10 @@
+/* =====================================================================
+   DIVIDER RIBBON — Slim Status Chip
+   Shows "Come back tomorrow" or "Claim your reward today!"
+   ===================================================================== */
+
 .ribbonWrapper {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   display: flex;
   justify-content: center;
   width: 100%;
@@ -10,18 +15,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
-  padding: 10px var(--space-6);
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.12) 0%, rgba(255, 201, 60, 0.12) 50%, rgba(139, 92, 246, 0.12) 100%);
-  border: 1px solid rgba(255, 201, 60, 0.35);
+  gap: var(--space-2);
+  padding: 8px var(--space-5);
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.14) 0%,
+    rgba(255, 201, 60, 0.12) 50%,
+    rgba(139, 92, 246, 0.14) 100%
+  );
+  border: 1px solid rgba(255, 201, 60, 0.4);
   border-radius: var(--radius-full);
   color: var(--gold-text);
   font-family: var(--font-heading);
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(255, 201, 60, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 14px rgba(255, 201, 60, 0.12);
   overflow: hidden;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -29,12 +39,8 @@
 }
 
 @keyframes attentionPulse {
-  0%, 100% {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(255, 201, 60, 0.15);
-  }
-  50% {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 28px rgba(255, 201, 60, 0.35);
-  }
+  0%, 100% { box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 14px rgba(255,201,60,0.12); }
+  50%       { box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 24px rgba(255,201,60,0.3); }
 }
 
 .shimmerStreak {
@@ -43,36 +49,46 @@
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  animation: ribbonSweep 3.2s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: ribbonSweep 3.5s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes ribbonSweep {
-  0% { left: -100%; }
-  45% { left: 160%; }
+  0%   { left: -100%; }
+  40%  { left: 160%; }
   100% { left: 160%; }
 }
 
 .sparkle {
   color: var(--gold-start);
-  animation: sparkleTwinkle 2s infinite ease-in-out;
+  animation: sparkleTwinkle 2.2s infinite ease-in-out;
   flex-shrink: 0;
 }
 
 @keyframes sparkleTwinkle {
   0%, 100% { transform: scale(0.85); opacity: 0.6; }
-  50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 6px var(--gold-start)); }
+  50%       { transform: scale(1.25); opacity: 1; filter: drop-shadow(0 0 6px var(--gold-start)); }
 }
 
 .ribbonText {
   color: #ffffff;
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 575px) {
   .ribbon {
-    padding: 8px var(--space-4);
-    font-size: 0.8rem;
+    padding: 7px var(--space-4);
+    font-size: 0.78rem;
     gap: var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ribbon,
+  .shimmerStreak,
+  .sparkle {
+    animation: none !important;
   }
 }

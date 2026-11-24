@@ -1,88 +1,165 @@
-.gridContainer {
+/* =====================================================================
+   REWARD GRID — VELoop Rewards Premium Redesign
+   Desktop ≥1200: Days 1–6 in 3×2 (8 cols) + Day 7 VIP (4 cols × 2 rows)
+   Tablet 768–1199: Days 1–6 in 2×3, Day 7 full-width below
+   Mobile <768: scroll-snap carousel
+   ===================================================================== */
+
+.gridSection {
   margin-bottom: var(--space-8);
+  position: relative;
+}
+
+.gridSectionTitle {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: var(--space-4);
+  padding-left: 2px;
+}
+
+/* ── DESKTOP LAYOUT (≥1200px): 12-col grid ── */
+.desktopLayout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.daysGrid {
+  grid-column: 1 / 9;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* ── VIP Featured Card Slot (4 cols, 2 rows tall) ── */
+.vipSlot {
+  grid-column: 9 / 13;
+  grid-row: 1;
+  display: flex;
+}
+
+/* ── TABLET LAYOUT (768–1199) ── */
+.tabletLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tabletDaysGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+@media (min-width: 860px) and (max-width: 1199px) {
+  .tabletDaysGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tabletVipRow {
   width: 100%;
 }
 
-/* Wide Desktop Single Row (>= 1100px) */
-.desktopRow {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--space-3);
-  align-items: stretch;
+/* ── MOBILE LAYOUT (<768px): scroll-snap carousel ── */
+.mobileLayout {
+  position: relative;
 }
 
-/* Tablet Row 1: 4 cards */
-.row1 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-  align-items: stretch;
+.mobileCarousel {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--space-4);
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: 0 -16px;
 }
 
-/* Tablet Row 2: 3 cards */
-.row2 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-3);
-  align-items: stretch;
+.mobileCarousel::-webkit-scrollbar {
+  height: 3px;
 }
 
-/* Responsive Tablet to Mobile */
-@media (max-width: 860px) and (min-width: 601px) {
-  .row1 {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+.mobileCarousel::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: var(--radius-full);
+}
+
+.mobileCarousel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobileCardSlot {
+  flex: 0 0 72vw;
+  max-width: 280px;
+  scroll-snap-align: center;
+  display: flex;
+}
+
+/* Today's card is larger on mobile */
+.mobileCardSlotHero {
+  flex: 0 0 82vw;
+  max-width: 320px;
+}
+
+.mobileVipSlot {
+  flex: 0 0 88vw;
+  max-width: 360px;
+  scroll-snap-align: center;
+  display: flex;
+}
+
+/* Pagination dots */
+.mobileDots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.mobileDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: background 180ms, width 180ms;
+}
+
+.mobileDotActive {
+  width: 20px;
+  border-radius: 3px;
+  background: var(--gold-primary);
+}
+
+/* ── ALL CARDS STRETCH to equal height ── */
+.daysGrid > *,
+.tabletDaysGrid > * {
+  min-height: 280px;
+}
+
+@media (max-width: 1199px) {
+  .daysGrid > *,
+  .tabletDaysGrid > * {
+    min-height: 260px;
   }
-  .row2 {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
 }
 
-/* Mobile: Smooth Scroll-Snap Carousel with Card Peeking */
 @media (max-width: 600px) {
-  .gridContainer {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: var(--space-3);
-    margin-bottom: var(--space-6);
-  }
-
-  /* Combine into a continuous horizontal scroll row on mobile */
-  .row1,
-  .row2 {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 12px;
-    margin-bottom: 0;
-  }
-
-  .row2 {
-    margin-top: 12px;
-  }
-
-  .gridContainer::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .gridContainer::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 246, 0.4);
-    border-radius: var(--radius-full);
-  }
-}
-
-@media (max-width: 440px) {
-  .row1,
-  .row2 {
-    grid-template-columns: repeat(2, 1fr);
-    display: grid;
-  }
-  .row2 > :last-child {
-    grid-column: span 2;
+  .mobileCardSlot,
+  .mobileCardSlotHero {
+    min-height: 300px;
   }
 }

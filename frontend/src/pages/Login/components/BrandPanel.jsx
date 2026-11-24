@@ -2,14 +2,23 @@ import StreakPath from './StreakPath.jsx';
 import { ShieldCheck, Sparkles, Flame, Zap, Award } from 'lucide-react';
 import styles from './BrandPanel.module.css';
 
+/*
+  BrandPanel — Login left panel redesign
+  - Floating chips repositioned to avoid overlaps
+  - Fake numbers removed (+50 pts, 10k+, Bonus 2x, 5-Day Streak)
+  - Replaced with generic non-numeric brand copy
+  - StreakPath remains (purely illustrative preview)
+  - Trust strip: "Secure login" + "Encrypted" (no fake count)
+  LOGIC UNCHANGED.
+*/
 export function BrandPanel() {
   return (
     <div className={styles.showcasePanel}>
       {/* Living Atmospheric Mesh Glows */}
-      <div className={styles.meshGlowViolet} aria-hidden="true" />
+      <div className={styles.meshGlowViolet}  aria-hidden="true" />
       <div className={styles.meshGlowMagenta} aria-hidden="true" />
-      <div className={styles.meshGlowGold} aria-hidden="true" />
-      <div className={styles.gridOverlay} aria-hidden="true" />
+      <div className={styles.meshGlowGold}    aria-hidden="true" />
+      <div className={styles.gridOverlay}     aria-hidden="true" />
 
       {/* Twinkling Star Particles */}
       <div className={styles.starryField} aria-hidden="true">
@@ -20,19 +29,19 @@ export function BrandPanel() {
         <span className={`${styles.star} ${styles.star5}`} />
       </div>
 
-      {/* Floating Glass Parallax Reward Chips */}
+      {/* Floating Glass Reward Chips — repositioned, no fake numbers */}
       <div className={styles.floatingChipsStage} aria-hidden="true">
         <div className={`${styles.rewardChip} ${styles.chip1}`}>
-          <Sparkles size={14} className={styles.chipGoldIcon} />
-          <span>+50 pts</span>
+          <Sparkles size={13} className={styles.chipGoldIcon} />
+          <span>Daily Rewards</span>
         </div>
         <div className={`${styles.rewardChip} ${styles.chip2}`}>
-          <Flame size={14} className={styles.chipFlameIcon} />
-          <span>5-Day Streak</span>
+          <Flame size={13} className={styles.chipFlameIcon} />
+          <span>Streak Bonus</span>
         </div>
         <div className={`${styles.rewardChip} ${styles.chip3}`}>
-          <Zap size={13} className={styles.chipCyanIcon} />
-          <span>Bonus 2x</span>
+          <Zap size={12} className={styles.chipCyanIcon} />
+          <span>VIP Unlocks</span>
         </div>
       </div>
 
@@ -53,12 +62,12 @@ export function BrandPanel() {
           Build an unstoppable streak, unlock exclusive digital rewards, and turn consistency into real treasures.
         </p>
 
-        {/* Signature 7-Day Streak Path */}
+        {/* Signature 7-Day Streak Path — static illustrative preview */}
         <div className={styles.pathContainer}>
           <StreakPath />
         </div>
 
-        {/* Trust Strip */}
+        {/* Trust Strip — removed fake "10k+ daily streakers" count */}
         <div className={styles.trustStrip}>
           <div className={styles.trustItem}>
             <ShieldCheck size={15} className={styles.trustIcon} />
@@ -70,8 +79,7 @@ export function BrandPanel() {
           </div>
           <span className={styles.trustDot}>•</span>
           <div className={styles.trustItem}>
-            <span className={styles.streakersCount}>10k+</span>
-            <span>daily streakers</span>
+            <span>VELoop Verified</span>
           </div>
         </div>
       </div>

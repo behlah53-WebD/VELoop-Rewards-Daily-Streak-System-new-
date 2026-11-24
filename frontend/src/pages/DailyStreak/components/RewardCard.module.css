@@ -1,229 +1,487 @@
+/* =====================================================================
+   REWARD CARD — VELoop Rewards Premium Redesign
+   Internal layout: 4 strict grid rows → header | stage | info | footer
+   No dead space. Equal heights via align-items: stretch on parent.
+   ===================================================================== */
+
+/* ── TOKENS (local) ─────────────────────────────────────────────── */
 .card {
   position: relative;
-  background: linear-gradient(160deg, rgba(22, 13, 58, 0.72) 0%, rgba(14, 8, 40, 0.88) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  display: grid;
+  grid-template-rows: 44px 1fr auto 56px;
+  align-items: start;
+  border-radius: 24px;
   overflow: hidden;
-  min-height: 220px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-  animation: cardFadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+
+  /* Glass surface with layered gradient border via pseudo element */
+  background: linear-gradient(160deg, rgba(22, 13, 58, 0.78) 0%, rgba(11, 6, 32, 0.92) 100%);
+  box-shadow:
+    0 12px 32px -4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: cardFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  cursor: default;
+}
+
+/* Gradient border via mask trick */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(139,92,246,0.18) 50%, rgba(255,255,255,0.05) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top rim specular highlight */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3) 50%, transparent);
+  pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes cardFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.65), 0 0 24px rgba(139, 92, 246, 0.25);
-}
-
-/* Card Top Specular Rim Light */
-.cardTopRim {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
-  pointer-events: none;
+  transform: translateY(-5px);
+  box-shadow:
+    0 20px 40px -6px rgba(0, 0, 0, 0.7),
+    0 0 24px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(167, 139, 250, 0.2);
 }
 
 /* =====================================================================
    CARD STATES
    ===================================================================== */
 
-/* 1. Available / Today Ready to Claim */
+/* 1. AVAILABLE — the most prominent card today */
 .cardAvailable {
-  border: 1.5px solid #ffc93c;
-  background: linear-gradient(160deg, rgba(38, 20, 68, 0.85) 0%, rgba(20, 11, 48, 0.95) 100%);
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 28px rgba(255, 201, 60, 0.45);
-  transform: translateY(-6px);
+  background: linear-gradient(160deg, rgba(38, 20, 68, 0.88) 0%, rgba(18, 10, 50, 0.96) 100%);
+  box-shadow:
+    0 16px 40px -4px rgba(0, 0, 0, 0.7),
+    0 0 36px rgba(255, 201, 60, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-8px);
+  animation: cardFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards, goldBorderSpin 4s linear infinite;
+}
+
+.cardAvailable::before {
+  background: conic-gradient(from var(--card-angle, 0deg), #ffc93c 0%, transparent 25%, transparent 75%, #ffc93c 100%);
+  animation: rotateAngle 3s linear infinite;
+}
+
+@property --card-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotateAngle {
+  to { --card-angle: 360deg; }
 }
 
 .cardAvailable:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 40px -4px rgba(0, 0, 0, 0.7), 0 0 38px rgba(255, 201, 60, 0.65);
+  transform: translateY(-10px);
+  box-shadow:
+    0 24px 48px -4px rgba(0, 0, 0, 0.8),
+    0 0 48px rgba(255, 201, 60, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
+/* TODAY ribbon badge */
+.todayRibbon {
+  position: absolute;
+  top: 12px;
+  right: -28px;
+  background: var(--gold-gradient);
+  color: #3b2200;
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 32px;
+  transform: rotate(45deg);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  text-transform: uppercase;
+}
+
+/* Orbiting sparkles around the asset */
 .availableSparkles {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  inset: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .sparkleDot {
   color: var(--gold-start);
-  animation: sparkleRotate 2s infinite linear;
+  animation: sparkleOrbit 2.5s ease-in-out infinite;
 }
 
-@keyframes sparkleRotate {
-  0% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
-  50% { transform: scale(1.2) rotate(90deg); opacity: 1; }
-  100% { transform: scale(0.8) rotate(180deg); opacity: 0.5; }
-}
-
-/* 2. Locked Card: Desaturated & Frosted Overlay */
-.cardLocked {
-  opacity: 0.72;
-  background: rgba(14, 8, 40, 0.7);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-.cardLocked:hover {
-  opacity: 0.9;
-  border-color: rgba(167, 139, 250, 0.3);
-}
-
-/* 3. Claimed Card: Emerald Badge & Stamped Checkmark Look */
-.cardClaimed {
-  border-color: rgba(52, 211, 153, 0.45);
-  background: linear-gradient(160deg, rgba(16, 45, 36, 0.6) 0%, rgba(14, 8, 40, 0.9) 70%);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4), 0 0 20px rgba(52, 211, 153, 0.2);
-}
-
-/* 4. Today Locked (Waiting for countdown timer) */
-.cardToday {
-  border: 1.5px solid rgba(139, 92, 246, 0.6);
-  background: linear-gradient(160deg, rgba(32, 18, 68, 0.8) 0%, rgba(14, 8, 40, 0.9) 70%);
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 22px rgba(139, 92, 246, 0.35);
-}
-
-/* 5. Missed Card */
-.cardMissed {
-  border-color: rgba(251, 113, 133, 0.4);
-  background: linear-gradient(160deg, rgba(45, 16, 24, 0.6) 0%, rgba(14, 8, 40, 0.9) 70%);
-}
-
-/* 6. Day 7 Ultimate / VIP Card */
-.cardUltimate {
-  border: 1.5px solid #ffc93c;
-  background: linear-gradient(160deg, rgba(46, 22, 80, 0.85) 0%, rgba(22, 10, 50, 0.95) 100%);
-  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 201, 60, 0.45);
-}
-
-.vipRibbonCorner {
-  position: absolute;
-  top: 8px;
-  right: -24px;
-  background: var(--gold-gradient);
-  color: #3b2200;
-  font-family: var(--font-heading);
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 2px 26px;
-  transform: rotate(45deg);
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  z-index: 5;
-}
-
-/* Header (Day & Badge) */
-.cardTop {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-2);
-}
-
-.dayPill {
-  font-size: 0.74rem;
-  font-weight: 800;
-  color: var(--text-2);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.2px;
-}
-
-.badgePill {
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.4px;
-}
-
-.badgeGold {
-  background: rgba(255, 201, 60, 0.18);
-  border: 1px solid var(--border-gold);
-  color: var(--gold-text);
-}
-
-.badgeViolet {
-  background: rgba(139, 92, 246, 0.18);
-  border: 1px solid rgba(139, 92, 246, 0.35);
+.sparkleDot:nth-child(2) {
+  animation-delay: 1.2s;
   color: var(--violet-bright);
+  position: absolute;
+  top: 30%;
+  right: 10%;
 }
 
-/* Inner Glow behind Asset */
-.assetWrap {
-  margin: var(--space-2) 0;
+@keyframes sparkleOrbit {
+  0%, 100% { transform: scale(0.7) rotate(0deg); opacity: 0.4; }
+  50%       { transform: scale(1.3) rotate(90deg); opacity: 1; }
+}
+
+/* 2. TODAY — countdown card */
+.cardToday {
+  background: linear-gradient(160deg, rgba(28, 15, 60, 0.85) 0%, rgba(14, 8, 40, 0.94) 100%);
+  box-shadow:
+    0 10px 28px -4px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(139, 92, 246, 0.4),
+    inset 0 1px 0 rgba(167, 139, 250, 0.1);
+}
+
+.cardToday::before {
+  background: linear-gradient(135deg, rgba(139,92,246,0.5) 0%, rgba(167,139,250,0.2) 50%, rgba(139,92,246,0.3) 100%);
+}
+
+/* 3. CLAIMED */
+.cardClaimed {
+  background: linear-gradient(160deg, rgba(10, 36, 28, 0.72) 0%, rgba(10, 8, 40, 0.92) 80%);
+  box-shadow:
+    0 8px 24px -4px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(52, 211, 153, 0.22),
+    inset 0 1px 0 rgba(52, 211, 153, 0.08);
+}
+
+.cardClaimed::before {
+  background: linear-gradient(135deg, rgba(52,211,153,0.4) 0%, rgba(16,185,129,0.15) 50%, rgba(52,211,153,0.2) 100%);
+}
+
+/* Claimed stamp badge on asset */
+.claimedStamp {
+  position: absolute;
+  top: 50%;
+  right: -4px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: 2px solid rgba(52,211,153,0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 64px;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(52,211,153,0.5);
+  z-index: 5;
+}
+
+/* 4. LOCKED */
+.cardLocked {
+  opacity: 0.75;
+  background: linear-gradient(160deg, rgba(14, 8, 36, 0.65) 0%, rgba(10, 6, 28, 0.88) 100%);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.5);
+}
+
+.cardLocked::before {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.03) 100%);
+}
+
+.cardLocked:hover {
+  opacity: 0.92;
+  transform: translateY(-3px);
+  box-shadow:
+    0 14px 28px -4px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(167, 139, 250, 0.2);
+}
+
+.cardLocked:hover::before {
+  background: linear-gradient(135deg, rgba(167,139,250,0.3) 0%, rgba(139,92,246,0.15) 100%);
+}
+
+/* 5. MISSED */
+.cardMissed {
+  background: linear-gradient(160deg, rgba(40, 12, 20, 0.65) 0%, rgba(14, 8, 40, 0.92) 80%);
+  box-shadow: 0 6px 16px -4px rgba(0,0,0,0.5), 0 0 12px rgba(251,113,133,0.1);
+}
+
+.cardMissed::before {
+  background: linear-gradient(135deg, rgba(251,113,133,0.3) 0%, rgba(251,113,133,0.1) 100%);
+}
+
+/* 6. ULTIMATE / VIP (Day 7 — when in flat grid, not featured card) */
+.cardUltimate {
+  background: linear-gradient(160deg, rgba(46, 20, 80, 0.9) 0%, rgba(20, 8, 48, 0.98) 100%);
+  box-shadow:
+    0 20px 40px -6px rgba(0, 0, 0, 0.75),
+    0 0 36px rgba(255, 201, 60, 0.5),
+    inset 0 0 24px rgba(255,201,60,0.06),
+    inset 0 1px 0 rgba(255,201,60,0.15);
+}
+
+.cardUltimate::before {
+  background: linear-gradient(135deg, #ffc93c 0%, rgba(255,201,60,0.3) 30%, rgba(139,92,246,0.3) 70%, #ffc93c 100%);
+  animation: rotateAngle 4s linear infinite;
+}
+
+/* =====================================================================
+   ROW 1 — HEADER (day badge + type chip)
+   ===================================================================== */
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 0;
   position: relative;
+  z-index: 3;
 }
 
-.assetInnerGlow {
+.dayPill {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-2);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.cardAvailable .dayPill {
+  background: rgba(255, 201, 60, 0.15);
+  border-color: rgba(255, 201, 60, 0.4);
+  color: var(--gold-text);
+}
+
+.cardClaimed .dayPill {
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.35);
+  color: var(--success);
+}
+
+.typeChip {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* Type chip variants */
+.chipCoin {
+  background: rgba(255, 201, 60, 0.15);
+  border: 1px solid rgba(255, 201, 60, 0.4);
+  color: var(--gold-text);
+}
+
+.chipGift {
+  background: rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  color: var(--violet-bright);
+}
+
+.chipGiftCard {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.chipVip {
+  background: linear-gradient(135deg, rgba(255,201,60,0.25), rgba(217,119,6,0.2));
+  border: 1px solid var(--border-gold);
+  color: var(--gold-text);
+  box-shadow: 0 0 8px rgba(255,201,60,0.2);
+}
+
+/* =====================================================================
+   ROW 2 — STAGE (asset with spotlight, floor shadow, rays)
+   ===================================================================== */
+
+.assetStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8px 0 4px;
+  z-index: 3;
+}
+
+/* Radial spotlight glow behind asset */
+.assetSpotlight {
   position: absolute;
-  width: 58px;
-  height: 58px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
-  filter: blur(10px);
+  filter: blur(20px);
   pointer-events: none;
+  z-index: 0;
 }
 
-.cardAvailable .assetInnerGlow,
-.cardUltimate .assetInnerGlow {
-  background: radial-gradient(circle, rgba(255, 201, 60, 0.35) 0%, transparent 70%);
+.spotlightCoin {
+  background: radial-gradient(circle, rgba(255, 201, 60, 0.45) 0%, transparent 70%);
 }
 
-.cardClaimed .assetInnerGlow {
-  background: radial-gradient(circle, rgba(52, 211, 153, 0.35) 0%, transparent 70%);
+.spotlightGift {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.45) 0%, transparent 70%);
 }
 
-/* Card Typography */
+.spotlightGiftCard {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%);
+}
+
+.spotlightCrown {
+  background: radial-gradient(circle, rgba(255, 201, 60, 0.6) 0%, transparent 70%);
+  width: 160px;
+  height: 160px;
+}
+
+/* Floor / pedestal shadow */
+.assetFloor {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  filter: blur(6px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Asset wrapper with float animation */
+.assetWrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: assetFloat 4.5s ease-in-out infinite;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes assetFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Claimed state: green filter overlay */
+.cardClaimed .assetWrap {
+  filter: drop-shadow(0 6px 12px rgba(52, 211, 153, 0.4));
+}
+
+/* Locked state: frosted asset */
+.cardLocked .assetWrap {
+  filter: blur(1px) brightness(0.6) drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+
+/* Available: intensified glow on hover */
+.cardAvailable:hover .assetWrap {
+  animation: assetFloatFast 2s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(255,201,60,0.6));
+}
+
+@keyframes assetFloatFast {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-8px) rotate(2deg); }
+}
+
+/* Lock badge on locked asset */
+.lockBadge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(14, 8, 40, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  z-index: 5;
+}
+
+/* Shine sweep across asset every 6s */
+.assetShine {
+  position: absolute;
+  top: -20%;
+  left: -60%;
+  width: 50%;
+  height: 140%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+  transform: skewX(-15deg);
+  pointer-events: none;
+  z-index: 6;
+  animation: shineSweep 6s ease-in-out infinite;
+}
+
+@keyframes shineSweep {
+  0%, 70%  { left: -60%; opacity: 0; }
+  72%       { opacity: 1; }
+  85%       { left: 120%; opacity: 0; }
+  100%      { left: 120%; }
+}
+
+/* =====================================================================
+   ROW 3 — REWARD INFO (category label + value)
+   ===================================================================== */
+
+.rewardInfo {
+  padding: 2px 14px 6px;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+}
+
 .cardCategory {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--text-3);
   text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.7px;
+  font-weight: 700;
   margin-bottom: 2px;
-  font-weight: 600;
 }
 
 .cardValue {
   font-family: var(--font-heading);
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 800;
   color: var(--text-1);
-  margin-bottom: var(--space-3);
-  line-height: 1.25;
+  line-height: 1.2;
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .goldValue {
@@ -231,20 +489,20 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
-  filter: drop-shadow(0 2px 8px rgba(255, 201, 60, 0.25));
+  filter: drop-shadow(0 2px 8px rgba(255, 201, 60, 0.3));
 }
 
-.hoverHint {
-  font-size: 0.72rem;
-  color: var(--text-3);
-  margin-bottom: 4px;
-  transition: opacity var(--transition-fast);
-}
+/* =====================================================================
+   ROW 4 — FOOTER ACTION (single CTA or status, fixed 56px height)
+   ===================================================================== */
 
-/* Footer & Buttons */
 .cardFooter {
-  width: 100%;
-  margin-top: auto;
+  padding: 0 14px 14px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
 }
 
 /* Molten Gold Claim Button */
@@ -255,7 +513,7 @@
   padding: 8px 12px;
   background: var(--gold-gradient);
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   color: #3b2200;
   font-family: var(--font-heading);
   font-weight: 800;
@@ -265,45 +523,52 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  box-shadow: 0 4px 16px rgba(255, 201, 60, 0.45);
+  box-shadow: 0 4px 16px rgba(255, 201, 60, 0.5), 0 0 0 0 rgba(255,201,60,0.4);
   overflow: hidden;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform 180ms cubic-bezier(0.22,1,0.36,1), box-shadow 180ms cubic-bezier(0.22,1,0.36,1);
+  animation: claimPulseAura 2.5s ease-in-out infinite;
+}
+
+@keyframes claimPulseAura {
+  0%, 100% { box-shadow: 0 4px 16px rgba(255,201,60,0.5), 0 0 0 0 rgba(255,201,60,0); }
+  50%       { box-shadow: 0 4px 20px rgba(255,201,60,0.6), 0 0 0 6px rgba(255,201,60,0.08); }
 }
 
 .btnSweep {
   position: absolute;
   top: 0;
   left: -100%;
-  width: 60%;
+  width: 55%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
   transform: skewX(-20deg);
-  animation: claimSweep 3s ease-in-out infinite;
+  animation: claimSweep 2.8s ease-in-out infinite;
   pointer-events: none;
 }
 
 @keyframes claimSweep {
-  0% { left: -100%; }
-  35% { left: 160%; }
+  0%   { left: -100%; }
+  40%  { left: 160%; }
   100% { left: 160%; }
 }
 
 .claimBtn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 201, 60, 0.65);
+  box-shadow: 0 8px 24px rgba(255, 201, 60, 0.7);
 }
 
 .claimBtn:hover:not(:disabled) .btnArrow {
-  transform: translateX(3px);
+  transform: translateX(4px);
 }
 
 .btnArrow {
-  transition: transform var(--transition-fast);
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .claimBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  animation: none;
 }
 
 /* Claimed Pill */
@@ -312,16 +577,17 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 40px;
-  background: rgba(52, 211, 153, 0.15);
-  border: 1px solid rgba(52, 211, 153, 0.45);
+  width: 100%;
+  min-height: 44px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.4);
   color: var(--success);
   padding: 6px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.82rem;
+  border-radius: 12px;
+  font-size: 0.84rem;
   font-weight: 800;
   letter-spacing: 0.2px;
-  box-shadow: 0 0 12px rgba(52, 211, 153, 0.2);
+  box-shadow: 0 0 14px rgba(52, 211, 153, 0.18);
 }
 
 .claimedCheck {
@@ -333,21 +599,41 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 40px;
-  background: rgba(139, 92, 246, 0.15);
+  gap: 7px;
+  width: 100%;
+  min-height: 44px;
+  background: rgba(139, 92, 246, 0.12);
   border: 1px solid rgba(139, 92, 246, 0.4);
   color: var(--violet-bright);
   padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-heading);
-  font-size: 0.82rem;
+  border-radius: 12px;
+  font-family: 'Sora', monospace;
+  font-size: 0.88rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+  letter-spacing: 0.5px;
 }
 
 .clockIcon {
   color: var(--violet-bright);
+  animation: clockTick 1s steps(2, end) infinite;
+  flex-shrink: 0;
+}
+
+@keyframes clockTick {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.countdownLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-right: 2px;
+  font-variant-numeric: normal;
 }
 
 /* Locked Pill */
@@ -356,18 +642,36 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 40px;
+  width: 100%;
+  min-height: 44px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-3);
-  padding: 6px 12px;
-  border-radius: var(--radius-full);
-  font-size: 0.82rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
   font-weight: 700;
+  flex-direction: column;
+  line-height: 1.2;
+  gap: 1px;
+}
+
+.lockPillRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .lockIcon {
   color: var(--text-3);
+  flex-shrink: 0;
+}
+
+.unlockDay {
+  font-size: 0.65rem;
+  color: var(--text-3);
+  opacity: 0.8;
+  letter-spacing: 0.3px;
 }
 
 /* Missed Pill */
@@ -376,12 +680,63 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: 40px;
+  width: 100%;
+  min-height: 44px;
   background: var(--danger-bg);
   border: 1px solid var(--danger-border);
   color: var(--danger);
   padding: 6px 12px;
-  border-radius: var(--radius-full);
+  border-radius: 12px;
   font-size: 0.82rem;
   font-weight: 700;
+}
+
+/* =====================================================================
+   MOBILE — compact horizontal card layout
+   ===================================================================== */
+
+@media (max-width: 600px) {
+  .card {
+    border-radius: 20px;
+  }
+
+  .assetStage {
+    padding: 6px 0 2px;
+  }
+
+  .assetFloor {
+    width: 54px;
+  }
+
+  .cardHeader {
+    padding: 8px 12px 0;
+  }
+
+  .rewardInfo {
+    padding: 2px 10px 4px;
+  }
+
+  .cardFooter {
+    padding: 0 10px 10px;
+  }
+
+  .cardValue {
+    font-size: 0.95rem;
+  }
+}
+
+/* =====================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .assetWrap,
+  .cardAvailable,
+  .btnSweep,
+  .assetShine,
+  .sparkleDot {
+    animation: none !important;
+    transition: none !important;
+  }
 }

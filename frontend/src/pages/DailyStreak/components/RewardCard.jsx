@@ -3,6 +3,25 @@ import { AnimatedAsset } from '../../../components/AnimatedAsset/AnimatedAsset.j
 import { Check, Lock, Clock, ChevronRight, Sparkles, Crown } from 'lucide-react';
 import styles from './RewardCard.module.css';
 
+/* Presentation-layer type chip mapping by day number (no logic change) */
+const DAY_TYPE_MAP = {
+  1: { label: 'COIN',      style: 'chipCoin' },
+  2: { label: 'COIN',      style: 'chipCoin' },
+  3: { label: 'COIN',      style: 'chipCoin' },
+  4: { label: 'GIFT',      style: 'chipGift' },
+  5: { label: 'GIFT CARD', style: 'chipGiftCard' },
+  6: { label: 'COIN',      style: 'chipCoin' },
+  7: { label: 'VIP',       style: 'chipVip' },
+};
+
+/* Spotlight color by asset type */
+const SPOTLIGHT_CLASS = {
+  coin:       styles.spotlightCoin,
+  'gift-box': styles.spotlightGift,
+  'gift-card':styles.spotlightGiftCard,
+  crown:      styles.spotlightCrown,
+};
+
 export function RewardCard({
   rewardItem,
   serverTime = null,
@@ -14,27 +33,23 @@ export function RewardCard({
 }) {
   const { day, status, badge, assetType, isUltimate, reward } = rewardItem;
 
-  // Use countdown hook only when status is 'TODAY'
+  // Use countdown hook only when status is 'TODAY' — LOGIC UNCHANGED
   const countdown = useServerCountdown(
     status === 'TODAY' ? serverTime : null,
     status === 'TODAY' ? nextClaimAt : null,
     onUnlocked
   );
 
+  /* ── Presentation helpers ── */
   const getCardClassName = () => {
     let classes = styles.card;
     if (isUltimate) classes += ` ${styles.cardUltimate}`;
     switch (status) {
-      case 'CLAIMED':
-        return `${classes} ${styles.cardClaimed}`;
-      case 'AVAILABLE':
-        return `${classes} ${styles.cardAvailable}`;
-      case 'TODAY':
-        return `${classes} ${styles.cardToday}`;
-      case 'MISSED':
-        return `${classes} ${styles.cardMissed}`;
-      default:
-        return `${classes} ${styles.cardLocked}`;
+      case 'CLAIMED':   return `${classes} ${styles.cardClaimed}`;
+      case 'AVAILABLE': return `${classes} ${styles.cardAvailable}`;
+      case 'TODAY':     return `${classes} ${styles.cardToday}`;
+      case 'MISSED':    return `${classes} ${styles.cardMissed}`;
+      default:          return `${classes} ${styles.cardLocked}`;
     }
   };
 
@@ -45,6 +60,11 @@ export function RewardCard({
     return 'none';
   };
 
+  const typeChip = DAY_TYPE_MAP[day] || DAY_TYPE_MAP[1];
+  const badgeToShow = isUltimate ? typeChip : (badge ? { label: badge, style: badge === 'VIP' ? 'chipVip' : 'chipGift' } : typeChip);
+  const spotlightClass = SPOTLIGHT_CLASS[assetType] || styles.spotlightCoin;
+
+  /* ── Action footer renders ── */
   const renderAction = () => {
     switch (status) {
       case 'CLAIMED':
@@ -66,7 +86,7 @@ export function RewardCard({
           >
             <span className={styles.btnSweep} aria-hidden="true" />
             <span className={styles.btnLabel}>
-              {isClaiming ? 'Claiming...' : 'Claim Now'}
+              {isClaiming ? 'Claiming…' : 'Claim Now'}
             </span>
             <ChevronRight size={15} className={styles.btnArrow} />
           </button>
@@ -74,8 +94,14 @@ export function RewardCard({
 
       case 'TODAY':
         return (
-          <div className={styles.countdownPill} title="Next claim countdown">
+          <div
+            className={styles.countdownPill}
+            title="Next claim countdown"
+            aria-live="polite"
+            aria-label={`Unlocks in ${countdown.formattedTime}`}
+          >
             <Clock size={13} className={styles.clockIcon} />
+            <span className={styles.countdownLabel}>Unlocks in</span>
             <span className={styles.countdownText}>{countdown.formattedTime}</span>
           </div>
         );
@@ -90,76 +116,87 @@ export function RewardCard({
       default:
         return (
           <div className={styles.lockedPill}>
-            <Lock size={12} className={styles.lockIcon} />
-            <span>Locked</span>
+            <div className={styles.lockPillRow}>
+              <Lock size={12} className={styles.lockIcon} />
+              <span>Locked</span>
+            </div>
+            <span className={styles.unlockDay}>Unlocks Day {day}</span>
           </div>
         );
     }
   };
+
+  /* ── Asset size ── */
+  const assetSize = isUltimate ? 72 : 96;
 
   return (
     <div
       className={getCardClassName()}
       style={{ animationDelay: `${index * 65}ms` }}
     >
-      {/* Top rim specular highlight line */}
-      <div className={styles.cardTopRim} aria-hidden="true" />
+      {/* TODAY ribbon (only on AVAILABLE card) */}
+      {status === 'AVAILABLE' && (
+        <div className={styles.todayRibbon} aria-hidden="true">TODAY</div>
+      )}
 
-      {/* Decorative sparkles on Available card */}
+      {/* Orbiting sparkles on AVAILABLE */}
       {status === 'AVAILABLE' && (
         <div className={styles.availableSparkles} aria-hidden="true">
           <Sparkles size={12} className={styles.sparkleDot} />
+          <Sparkles size={10} className={styles.sparkleDot} />
         </div>
       )}
 
-      {/* VIP Ribbon badge on Day 7 card */}
-      {isUltimate && (
-        <div className={styles.vipRibbonCorner}>
-          <Crown size={11} />
-          <span>VIP</span>
+      {/* ── ROW 1: Header — Day badge + Type chip ── */}
+      <div className={styles.cardHeader}>
+        <span className={styles.dayPill}>DAY {day}</span>
+        <span className={`${styles.typeChip} ${styles[badgeToShow.style]}`}>
+          {isUltimate && <Crown size={9} style={{ marginRight: 3 }} />}
+          {badgeToShow.label}
+        </span>
+      </div>
+
+      {/* ── ROW 2: Stage — asset with spotlight, floor shadow, shine ── */}
+      <div className={styles.assetStage}>
+        <div className={`${styles.assetSpotlight} ${spotlightClass}`} aria-hidden="true" />
+        <div className={styles.assetFloor} aria-hidden="true" />
+
+        <div className={styles.assetWrap}>
+          <AnimatedAsset
+            type={assetType || 'coin'}
+            size={assetSize}
+            animation={getAnimation()}
+            alt={reward?.title || `Day ${day} reward`}
+          />
+          <span className={styles.assetShine} aria-hidden="true" />
+
+          {/* Claimed stamp badge */}
+          {status === 'CLAIMED' && (
+            <div className={styles.claimedStamp} aria-hidden="true">
+              <Check size={12} strokeWidth={3} />
+            </div>
+          )}
+
+          {/* Lock badge overlay on locked asset */}
+          {status !== 'CLAIMED' && status !== 'AVAILABLE' && status !== 'TODAY' && status !== 'MISSED' && (
+            <div className={styles.lockBadge} aria-hidden="true">
+              <Lock size={12} />
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Card Header (Day & Badge Tag) */}
-      <div className={styles.cardTop}>
-        <span className={styles.dayPill}>Day {day}</span>
-        {badge && (
-          <span
-            className={`${styles.badgePill} ${
-              badge === 'VIP' ? styles.badgeGold : styles.badgeViolet
-            }`}
-          >
-            {badge}
-          </span>
-        )}
       </div>
 
-      {/* Inner Aura & Reward Asset */}
-      <div className={styles.assetWrap}>
-        <div className={styles.assetInnerGlow} aria-hidden="true" />
-        <AnimatedAsset
-          type={assetType || 'coin'}
-          size={isUltimate ? 62 : 52}
-          animation={getAnimation()}
-          alt={reward?.title || `Day ${day} reward`}
-        />
-      </div>
-
-      <div className={styles.cardCategory}>
-        {isUltimate ? 'Ultimate Reward' : 'Daily Reward'}
-      </div>
-
-      <div className={`${styles.cardValue} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
-        {reward?.title || `${reward?.amount} VEs`}
-      </div>
-
-      {/* Hover unlock tooltip for locked cards */}
-      {status !== 'CLAIMED' && status !== 'AVAILABLE' && status !== 'TODAY' && (
-        <div className={styles.hoverHint}>
-          Unlocks on Day {day}
+      {/* ── ROW 3: Reward Info ── */}
+      <div className={styles.rewardInfo}>
+        <div className={styles.cardCategory}>
+          {isUltimate ? 'Ultimate Reward' : 'Daily Reward'}
         </div>
-      )}
+        <div className={`${styles.cardValue} ${isUltimate || status === 'AVAILABLE' ? styles.goldValue : ''}`}>
+          {reward?.title || `+${reward?.amount} VEs`}
+        </div>
+      </div>
 
+      {/* ── ROW 4: Footer Action ── */}
       <div className={styles.cardFooter}>
         {renderAction()}
       </div>

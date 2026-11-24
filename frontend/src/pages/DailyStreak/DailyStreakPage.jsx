@@ -3,8 +3,6 @@ import { useDailyStreak } from '../../hooks/useDailyStreak.js';
 import { useClaimFlow } from '../../hooks/useClaimFlow.js';
 import StreakHeader from './components/StreakHeader.jsx';
 import HeroBanner from './components/HeroBanner.jsx';
-import StreakStats from './components/StreakStats.jsx';
-import UltimateReward from './components/UltimateReward.jsx';
 import ProgressRail from './components/ProgressRail.jsx';
 import DividerRibbon from './components/DividerRibbon.jsx';
 import RewardGrid from './components/RewardGrid.jsx';
@@ -75,13 +73,13 @@ export function DailyStreakPage() {
   return (
     <div className={styles.pageWrapper}>
       {/* Ambient background lighting */}
-      <div className={styles.ambientBlobTop} aria-hidden="true" />
+      <div className={styles.ambientBlobTop}    aria-hidden="true" />
       <div className={styles.ambientBlobBottom} aria-hidden="true" />
 
       <StreakHeader walletBalance={wallet.VES} />
 
       <main className={styles.mainContainer}>
-        {/* Reset Notice Banner (lazily generated when claim window expired) */}
+        {/* Reset Notice Banner */}
         {resetNotice && (
           <ResetBanner
             notice={resetNotice}
@@ -89,29 +87,20 @@ export function DailyStreakPage() {
           />
         )}
 
-        {/* Hero Banner */}
-        <HeroBanner />
+        {/* STREAK COMMAND CENTER — HeroBanner now receives streakData for the ring + chips */}
+        <HeroBanner streakData={streak} />
 
-        {/* Stats Row & Ultimate Reward (Tablet & Desktop Side-by-Side, Mobile Stacked) */}
-        <div className={styles.statsAndUltimateRow}>
-          <StreakStats streakData={streak} />
-          <UltimateReward
-            ultimateReward={streak?.ultimateReward}
-            currentDay={streak?.currentDay}
-          />
-        </div>
-
-        {/* Progress Rail */}
+        {/* JOURNEY TRACKER — slim strip, DividerRibbon message embedded below */}
         <ProgressRail
           currentDay={streak?.currentDay}
           claimedDays={rewards.filter((r) => r.status === 'CLAIMED').map((r) => r.day)}
           totalDays={streak?.totalRewards || 7}
         />
 
-        {/* Divider Ribbon */}
+        {/* Status ribbon chip (Come back tomorrow / Claim today) */}
         <DividerRibbon canClaim={streak?.canClaim} />
 
-        {/* Responsive 7-Day Reward Grid */}
+        {/* Responsive 7-Day Reward Grid (Days 1–6 + Day 7 VIP featured card) */}
         <RewardGrid
           rewards={rewards}
           serverTime={data?.serverTime}
@@ -133,13 +122,13 @@ export function DailyStreakPage() {
           </p>
         </div>
 
-        {/* Why Maintain Streak Columns */}
+        {/* Why Maintain Streak */}
         <WhyStreak />
       </main>
 
       <TrustFooter />
 
-      {/* Two-Phase Claim Modal with CPA Verification Simulation */}
+      {/* Two-Phase Claim Modal with CPA Verification */}
       <ClaimModal
         isOpen={claimStep !== 'IDLE'}
         claimStep={claimStep}
